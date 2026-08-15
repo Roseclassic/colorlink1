@@ -6,17 +6,11 @@ import {
   Sliders,
   CheckCircle2,
   ShieldCheck,
-  Droplets,
-  Sun,
-  Layers,
-  HelpCircle,
   Eye,
-  RotateCcw,
   Palette,
   Check,
-  Cpu,
-  Info,
-  Maximize2
+  HelpCircle,
+  Award
 } from 'lucide-react';
 import {
   AiTechnicalAnalysis,
@@ -45,14 +39,12 @@ export const StepAiDiagnosticsAndTransformation: React.FC<StepAiDiagnosticsAndTr
   onNext,
   onBack
 }) => {
-  // Slider position (percentage 0 to 100)
   const [sliderPosition, setSliderPosition] = useState<number>(50);
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [answeredQuestion, setAnsweredQuestion] = useState<string | null>(
     input.aiFollowUpAnswer || null
   );
 
-  // Selected Style for transformation
   const [selectedStyleId, setSelectedStyleId] = useState<string>(
     input.selectedStyle || TRANSFORMATION_STYLES[0].id
   );
@@ -83,87 +75,86 @@ export const StepAiDiagnosticsAndTransformation: React.FC<StepAiDiagnosticsAndTr
   };
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 animate-fadeIn">
+    <div className="max-w-5xl mx-auto space-y-7 sm:space-y-8 animate-fadeIn text-slate-800">
       
       {/* Intro Header */}
-      <div className="text-center space-y-2.5">
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-semibold">
-          <Cpu className="w-3.5 h-3.5 text-cyan-400" />
-          <span>Diagnóstico de Visión IA & Simulación de Transformación</span>
+      <div className="text-center space-y-2.5 pt-1">
+        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-amber-50 border border-amber-200/70 text-amber-800 text-xs font-semibold">
+          <Award className="w-3.5 h-3.5 text-amber-600" />
+          <span>Paso 3: Diagnóstico Asistido por IA & Simulación</span>
         </div>
 
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-display">
-          Entendiendo tu espacio <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-amber-300 to-emerald-400">antes de pintar</span>
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-display">
+          Entendiendo tu espacio <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-yellow-600">antes de pintar</span>
         </h2>
         
-        <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          Nuestra IA procesó la estructura del muro y los factores climáticos. Desliza la cortina para comparar el estado actual con la simulación renovada.
+        <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          Nuestra IA procesó la estructura del muro y los factores de humedad. Compara el estado actual con la simulación renovada con acabados Pintuco.
         </p>
       </div>
 
-      {/* AI Conversational Diagnostic Bubble (Empático & Profesional) */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-900/90 via-slate-900/95 to-slate-900/90 border border-cyan-500/30 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-48 h-48 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none" />
+      {/* AI Conversational Diagnostic Card (Limpio, Cálido, Confiable) */}
+      <div className="p-5 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-sm text-left space-y-4">
         
-        <div className="flex items-start space-x-3.5">
-          <div className="p-2.5 rounded-xl bg-cyan-500/20 text-cyan-300 ring-1 ring-cyan-400/30 shrink-0 mt-0.5">
-            <Sparkles className="w-5 h-5 text-cyan-300 animate-pulse" />
+        <div className="flex flex-col sm:flex-row items-start space-y-3 sm:space-y-0 sm:space-x-4">
+          <div className="p-3 rounded-2xl bg-amber-500 text-slate-950 font-bold shadow-sm shrink-0">
+            <Sparkles className="w-6 h-6" />
           </div>
 
-          <div className="space-y-2 flex-1">
+          <div className="space-y-2.5 flex-1 w-full">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-cyan-400">
-                Dictamen Técnico del Asistente Digital
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-800 font-mono">
+                Dictamen Técnico del Asistente Pintuco
               </span>
-              <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">
-                Confianza IA: {aiAnalysis.overallConfidence}%
+              <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200 font-bold">
+                Certeza Diagnóstica: {aiAnalysis.overallConfidence}%
               </span>
             </div>
 
-            <p className="text-sm sm:text-base text-slate-100 font-medium leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-800 font-medium leading-relaxed">
               "{aiAnalysis.conversationalSummary}"
             </p>
 
             {/* Diagnostic Badges Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-800/80 text-xs">
-              <div className="p-2 rounded-lg bg-slate-950/60 border border-slate-800">
-                <span className="text-[10px] text-slate-400 block font-mono">Sustrato detectado</span>
-                <strong className="text-slate-200 text-xs truncate block">{aiAnalysis.detectedSurface}</strong>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3 border-t border-slate-100 text-xs">
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <span className="text-[10px] text-slate-500 block font-mono">Sustrato detectado</span>
+                <strong className="text-slate-900 text-xs truncate block mt-0.5">{aiAnalysis.detectedSurface}</strong>
               </div>
 
-              <div className="p-2 rounded-lg bg-slate-950/60 border border-slate-800">
-                <span className="text-[10px] text-slate-400 block font-mono">Patología principal</span>
-                <strong className="text-amber-300 text-xs truncate block">{aiAnalysis.primaryProblem}</strong>
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <span className="text-[10px] text-slate-500 block font-mono">Condición principal</span>
+                <strong className="text-amber-800 text-xs truncate block mt-0.5">{aiAnalysis.primaryProblem}</strong>
               </div>
 
-              <div className="p-2 rounded-lg bg-slate-950/60 border border-slate-800">
-                <span className="text-[10px] text-slate-400 block font-mono">Índice de Humedad</span>
-                <strong className={`text-xs block ${aiAnalysis.moistureIndex > 30 ? 'text-amber-400' : 'text-emerald-400'}`}>
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <span className="text-[10px] text-slate-500 block font-mono">Índice de Humedad</span>
+                <strong className={`text-xs block mt-0.5 ${aiAnalysis.moistureIndex > 30 ? 'text-amber-700 font-bold' : 'text-emerald-700 font-bold'}`}>
                   {aiAnalysis.moistureIndex}% ({aiAnalysis.moistureIndex > 30 ? 'Humedad presente' : 'Normal seco'})
                 </strong>
               </div>
 
-              <div className="p-2 rounded-lg bg-slate-950/60 border border-slate-800">
-                <span className="text-[10px] text-slate-400 block font-mono">Complejidad</span>
-                <strong className="text-cyan-300 text-xs block">{aiAnalysis.complexityLevel}</strong>
+              <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                <span className="text-[10px] text-slate-500 block font-mono">Nivel de Exposición</span>
+                <strong className="text-blue-700 text-xs block mt-0.5">{aiAnalysis.complexityLevel}</strong>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Smart Question (Only if applicable) */}
+      {/* Smart Calibration Question (If needed) */}
       {aiAnalysis.smartFollowUp && (
-        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-left space-y-2.5 animate-fadeIn">
-          <div className="flex items-center space-x-2 text-xs font-bold text-amber-300">
-            <HelpCircle className="w-4 h-4" />
-            <span>Pregunta de Calibración Técnica:</span>
+        <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/70 border border-amber-200/80 text-left space-y-2.5 animate-fadeIn">
+          <div className="flex items-center space-x-2 text-xs font-bold text-amber-900 font-mono">
+            <HelpCircle className="w-4 h-4 text-amber-700" />
+            <span>PREGUNTA DE CALIBRACIÓN:</span>
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-200 font-medium">
+          <p className="text-xs sm:text-sm text-slate-800 font-semibold">
             {aiAnalysis.smartFollowUp.question}
           </p>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-slate-600">
             {aiAnalysis.smartFollowUp.explanation}
           </p>
 
@@ -174,10 +165,10 @@ export const StepAiDiagnosticsAndTransformation: React.FC<StepAiDiagnosticsAndTr
                 <button
                   key={i}
                   onClick={() => handleQuestionAnswer(opt.label)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all text-left flex items-center space-x-1.5 cursor-pointer ${
+                  className={`min-h-[40px] px-3.5 py-2 rounded-xl text-xs font-semibold transition-all text-left flex items-center space-x-1.5 cursor-pointer active:scale-95 ${
                     isSelected
-                      ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
-                      : 'bg-slate-900/90 text-slate-300 hover:bg-slate-800 border border-slate-800'
+                      ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
+                      : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
                   }`}
                 >
                   {isSelected && <Check className="w-3.5 h-3.5 shrink-0" />}
@@ -194,29 +185,47 @@ export const StepAiDiagnosticsAndTransformation: React.FC<StepAiDiagnosticsAndTr
         
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h3 className="text-lg font-bold text-white flex items-center gap-2">
-              <Eye className="w-5 h-5 text-cyan-400" />
+            <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 font-display">
+              <Eye className="w-5 h-5 text-amber-600" />
               <span>Simulación Visual de Transformación</span>
             </h3>
-            <p className="text-xs text-slate-400">
-              Desliza el controlador central para ver la comparación interactiva Antes y Después.
+            <p className="text-xs text-slate-500">
+              Desliza el controlador central para comparar el cambio con el color aplicado.
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 text-xs font-mono">
-            <span className="px-2.5 py-1 rounded bg-slate-800 text-slate-300 border border-slate-700">
-              Antes: Foto Real
-            </span>
-            <span className="text-cyan-400 font-bold">vs</span>
-            <span className="px-2.5 py-1 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
-              Después: {activeStyle.colorName}
-            </span>
+          {/* Quick 1-Tap Toggle Modes */}
+          <div className="flex items-center space-x-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200">
+            <button
+              onClick={() => setSliderPosition(0)}
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+                sliderPosition === 0 ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Ver Antes
+            </button>
+            <button
+              onClick={() => setSliderPosition(50)}
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+                sliderPosition === 50 ? 'bg-amber-500 text-slate-950 font-bold shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              50% Comparar
+            </button>
+            <button
+              onClick={() => setSliderPosition(100)}
+              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+                sliderPosition === 100 ? 'bg-blue-600 text-white font-bold shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              Ver Después
+            </button>
           </div>
         </div>
 
         {/* Interactive Split Viewport */}
         <div
-          className="relative w-full aspect-video sm:aspect-[21/9] rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-950 select-none cursor-ew-resize group"
+          className="relative w-full aspect-video sm:aspect-[21/9] rounded-3xl overflow-hidden border border-slate-200 shadow-md bg-slate-100 select-none cursor-ew-resize group"
           onMouseDown={() => setIsDragging(true)}
           onMouseUp={() => setIsDragging(false)}
           onMouseLeave={() => setIsDragging(false)}
@@ -236,7 +245,7 @@ export const StepAiDiagnosticsAndTransformation: React.FC<StepAiDiagnosticsAndTr
             setSliderPosition((x / rect.width) * 100);
           }}
         >
-          {/* AFTER IMAGE (Transformed state - Full base) */}
+          {/* AFTER IMAGE (Transformed state) */}
           <img
             src={afterImage}
             alt="Espacio transformado con Pintuco"
@@ -254,81 +263,77 @@ export const StepAiDiagnosticsAndTransformation: React.FC<StepAiDiagnosticsAndTr
               className="absolute inset-y-0 left-0 w-full h-full object-cover max-w-none"
               style={{ width: '100%', minWidth: '100%', height: '100%' }}
             />
-            
-            {/* Dark gradient shadow on cut */}
-            <div className="absolute inset-0 bg-slate-950/10 pointer-events-none" />
           </div>
 
           {/* SPLIT DIVIDER LINE & HANDLE */}
           <div
-            className="absolute inset-y-0 w-1 bg-white shadow-[0_0_12px_rgba(255,255,255,0.8)] pointer-events-none"
+            className="absolute inset-y-0 w-1 bg-white shadow-[0_0_12px_rgba(0,0,0,0.5)] pointer-events-none"
             style={{ left: `${sliderPosition}%` }}
           >
-            {/* Center Draggable Circle Badge */}
-            <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-950 text-white border-2 border-white shadow-xl flex items-center justify-center pointer-events-none">
-              <Sliders className="w-4 h-4 text-cyan-400 rotate-90" />
+            <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-white text-slate-800 shadow-xl border border-slate-200 flex items-center justify-center pointer-events-none">
+              <Sliders className="w-4 h-4 text-amber-600 rotate-90" />
             </div>
           </div>
 
           {/* Overlaid Badges */}
           <div className="absolute top-3 left-3 pointer-events-none">
-            <span className="px-3 py-1 rounded-lg bg-slate-950/80 backdrop-blur-md text-xs font-bold text-slate-200 border border-slate-700 shadow-md">
-              📷 Estado Actual (Antes)
+            <span className="px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-xs font-semibold text-white shadow-sm">
+              📷 Estado Actual
             </span>
           </div>
 
           <div className="absolute top-3 right-3 pointer-events-none">
-            <span className="px-3 py-1 rounded-lg bg-cyan-950/80 backdrop-blur-md text-xs font-bold text-cyan-300 border border-cyan-500/50 shadow-md flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Transformado con Pintuco</span>
+            <span className="px-3 py-1 rounded-full bg-amber-500 text-slate-950 backdrop-blur-md text-xs font-bold shadow-sm flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-slate-950" />
+              <span>Simulación con Pintuco</span>
             </span>
           </div>
 
           {/* Bottom Banner with Current Applied Transformation Attributes */}
-          <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-800 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="absolute bottom-3 left-3 right-3 p-3 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/80 shadow-md flex flex-wrap items-center justify-between gap-2 text-xs">
             <div className="flex items-center space-x-2.5">
               <div
-                className="w-4 h-4 rounded-full border border-white/50 shadow-inner"
+                className="w-4 h-4 rounded-full border border-slate-300 shadow-inner"
                 style={{ backgroundColor: activeStyle.colorHex }}
               />
-              <span className="text-white font-semibold">
+              <span className="text-slate-900 font-bold">
                 Color: {activeStyle.colorName} ({activeStyle.colorCode})
               </span>
             </div>
 
-            <div className="flex items-center gap-3 text-slate-300">
-              <span>Acabado: <strong className="text-cyan-300">{activeStyle.finish}</strong></span>
+            <div className="flex items-center gap-3 text-slate-600">
+              <span>Acabado: <strong className="text-slate-900">{activeStyle.finish}</strong></span>
               <span className="hidden sm:inline">•</span>
-              <span className="hidden sm:inline">Estilo: <strong className="text-amber-300">{activeStyle.name}</strong></span>
+              <span className="hidden sm:inline">Paleta: <strong className="text-amber-800">{activeStyle.name}</strong></span>
             </div>
           </div>
         </div>
 
         {/* Range Slider controller for accessibility */}
         <div className="flex items-center space-x-3 px-2 pt-1">
-          <span className="text-xs text-slate-400 font-mono">Antes (0%)</span>
+          <span className="text-xs text-slate-500 font-medium">Antes</span>
           <input
             type="range"
             min={0}
             max={100}
             value={sliderPosition}
             onChange={(e) => setSliderPosition(Number(e.target.value))}
-            className="flex-1 accent-cyan-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg"
+            className="flex-1 accent-amber-500 cursor-pointer h-2 bg-slate-200 rounded-lg"
           />
-          <span className="text-xs text-cyan-400 font-mono">Después (100%)</span>
+          <span className="text-xs text-amber-800 font-bold">Después</span>
         </div>
 
       </div>
 
       {/* Style & Color Transformation Palettes Picker */}
-      <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3.5">
-        <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold text-white uppercase tracking-wider flex items-center gap-2">
-            <Palette className="w-4 h-4 text-cyan-400" />
-            <span>Elige el estilo y paleta recomendada para tu espacio:</span>
+      <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+          <label className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2 font-mono">
+            <Palette className="w-4 h-4 text-amber-600" />
+            <span>Colección Inspiración Colombia (Pintuco):</span>
           </label>
-          <span className="text-[11px] text-slate-400">
-            Colección Inspiración Colombia
+          <span className="text-[11px] text-slate-500">
+            Toca cualquier tono para actualizar la simulación
           </span>
         </div>
 
@@ -339,30 +344,30 @@ export const StepAiDiagnosticsAndTransformation: React.FC<StepAiDiagnosticsAndTr
               <div
                 key={style.id}
                 onClick={() => handleStyleSelect(style)}
-                className={`p-3 rounded-xl border cursor-pointer transition-all text-left flex items-start space-x-3 ${
+                className={`p-3.5 rounded-2xl border cursor-pointer transition-all text-left flex items-start space-x-3 active:scale-[0.98] ${
                   isSelected
-                    ? 'bg-slate-800/90 border-cyan-500 ring-1 ring-cyan-500/50 shadow-md'
-                    : 'bg-slate-900/40 border-slate-800 hover:bg-slate-800/50 hover:border-slate-700'
+                    ? 'bg-amber-50/70 border-amber-400 shadow-xs'
+                    : 'bg-slate-50/60 border-slate-200 hover:bg-white hover:border-slate-300'
                 }`}
               >
                 <div
-                  className="w-8 h-8 rounded-lg shrink-0 border border-white/20 shadow-md mt-0.5"
+                  className="w-9 h-9 rounded-xl shrink-0 border border-slate-300 shadow-xs mt-0.5"
                   style={{ backgroundColor: style.colorHex }}
                 />
 
                 <div className="flex-1 min-w-0 space-y-0.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-white truncate">
+                    <span className="text-xs font-bold text-slate-900 truncate">
                       {style.name}
                     </span>
-                    {isSelected && <Check className="w-3.5 h-3.5 text-cyan-400 shrink-0" />}
+                    {isSelected && <Check className="w-3.5 h-3.5 text-amber-600 shrink-0" />}
                   </div>
 
-                  <p className="text-[11px] text-cyan-300 font-medium truncate">
+                  <p className="text-[11px] text-amber-800 font-semibold truncate">
                     {style.colorName} • {style.finish}
                   </p>
 
-                  <p className="text-[10px] text-slate-400 leading-tight line-clamp-2">
+                  <p className="text-[10px] text-slate-500 leading-tight line-clamp-2">
                     {style.description}
                   </p>
                 </div>
@@ -373,22 +378,22 @@ export const StepAiDiagnosticsAndTransformation: React.FC<StepAiDiagnosticsAndTr
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex items-center justify-between gap-4 pt-2">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
         <button
           onClick={onBack}
-          className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 text-xs font-semibold transition-colors flex items-center space-x-2 cursor-pointer"
+          className="w-full sm:w-auto min-h-[44px] px-5 py-3 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold transition-colors flex items-center justify-center space-x-2 cursor-pointer shadow-xs"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Modificar Foto / Datos</span>
+          <span>Cambiar Foto / Datos</span>
         </button>
 
         <button
           id="btn-next-to-recommendation"
           onClick={onNext}
-          className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white font-semibold text-sm shadow-xl shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center space-x-2 cursor-pointer"
+          className="w-full sm:w-auto min-h-[48px] px-8 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center space-x-2 cursor-pointer"
         >
           <span>Ver "Tu recomendación ColorLink"</span>
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-4 h-4 text-slate-950" />
         </button>
       </div>
 

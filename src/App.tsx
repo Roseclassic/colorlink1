@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { Header } from './components/Header';
+import { BottomNav } from './components/BottomNav';
+import { UserProfileModal } from './components/UserProfileModal';
+import { WelcomeScreen } from './components/client/WelcomeScreen';
 import { ClientWizard } from './components/client/ClientWizard';
 import { MyRequestsTracker } from './components/client/MyRequestsTracker';
 import { InternalDashboard } from './components/dashboard/InternalDashboard';
@@ -8,29 +11,37 @@ import { INITIAL_REQUESTS, SAMPLE_IMAGES, SPACE_OPTIONS } from './data/mockData'
 import {
   ClientProjectInput,
   ProjectRequest,
-  RequestStatus,
+  ProjectStatus,
   SampleImageOption
 } from './types';
 import { runAiSurfaceDiagnostics } from './utils/aiDiagnostics';
-import { CheckCircle2, Sparkles, Wand2, LayoutDashboard, ArrowRight, Clock, Building2, Home } from 'lucide-react';
+import {
+  Sparkles,
+  Wand2,
+  LayoutDashboard,
+  Clock
+} from 'lucide-react';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'client' | 'requests' | 'dashboard'>('client');
+  const [currentView, setCurrentView] = useState<'welcome' | 'client' | 'requests' | 'dashboard'>('welcome');
   const [requests, setRequests] = useState<ProjectRequest[]>(INITIAL_REQUESTS);
   const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false);
+  const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const [isSyncedToDashboard, setIsSyncedToDashboard] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Default input state
+  // Default input state with Colombian context
   const defaultInitialSample = SAMPLE_IMAGES[0];
   const [currentInput, setCurrentInput] = useState<ClientProjectInput>({
+    transformationTarget: 'hogar',
     clientType: 'particular',
-    clientName: 'María Fernanda Gómez',
-    clientEmail: 'maria.gomez@gmail.com',
-    clientPhone: '+34 654 321 987',
-    clientCity: 'Madrid',
+    clientName: 'Laura María Restrepo',
+    clientEmail: 'laura.restrepo@pintuco-usuario.co',
+    clientPhone: '+57 312 847 2910',
+    clientCity: 'Bogotá D.C.',
     spaceType: 'hogar',
-    specificArea: 'Salón / Comedor',
+    specificSpaceSubtype: 'Sala / Comedor',
+    specificArea: 'Zona social con muro de acento',
     currentCondition: 'humedad',
     estimatedM2: 28,
     trafficLevel: 'medio',
@@ -38,8 +49,12 @@ export default function App() {
     description: defaultInitialSample.defaultDescription,
     imageUrl: defaultInitialSample.url,
     imageUrls: [defaultInitialSample.url],
-    imageFileName: 'muro_salon_filtracion.jpg',
-    preferredFinish: 'mate'
+    imageFileName: 'muro_sala_humedad_bogota.jpg',
+    preferredFinish: 'satinado',
+    selectedStyle: 'lino-andino',
+    selectedColorName: 'Lino Andino',
+    selectedColorCode: 'PT-104',
+    selectedColorHex: '#EAE5D9'
   });
 
   // Calculate live AI diagnostic & coating recommendation
@@ -55,7 +70,6 @@ export default function App() {
   const handleInputChange = (updates: Partial<ClientProjectInput>) => {
     setCurrentInput((prev) => {
       const next = { ...prev, ...updates };
-      // If spaceType changed and specificArea is no longer in subtypes, update specificArea
       if (updates.spaceType && updates.spaceType !== prev.spaceType) {
         const spaceConf = SPACE_OPTIONS.find((s) => s.id === updates.spaceType);
         if (spaceConf && spaceConf.subtypes.length > 0) {
@@ -77,16 +91,16 @@ export default function App() {
       estimatedM2: sample.areaM2,
       description: sample.defaultDescription
     }));
-    showToast(`Muestra "${sample.title}" cargada para análisis IA.`);
+    showToast(`Espacio "${sample.title}" cargado para análisis IA Pintuco.`);
     setIsSyncedToDashboard(false);
   };
 
   const handleAnswerSmartQuestion = (questionId: string, answer: string) => {
-    showToast(`Calibración IA aplicada: "${answer}"`);
+    showToast(`Calibración IA Pintuco: "${answer}" registrada.`);
   };
 
   const handleSendToDashboard = () => {
-    const randomCodeNum = Math.floor(1000 + Math.random() * 9000);
+    const randomCodeNum = Math.floor(8500 + Math.random() * 999);
     const newCode = `CLK-${randomCodeNum}`;
 
     const newRequest: ProjectRequest = {
@@ -95,10 +109,12 @@ export default function App() {
       createdAt: 'Hace un momento',
       clientType: currentInput.clientType || 'particular',
       client: {
-        name: currentInput.clientType === 'empresa' ? (currentInput.companyContactPerson || currentInput.companyName || 'Responsable Empresa') : (currentInput.clientName || 'Cliente Particular'),
-        email: currentInput.clientEmail || 'cliente@colorlink.ai',
-        phone: currentInput.clientPhone || '+34 600 000 000',
-        city: currentInput.clientCity || 'Madrid',
+        name: currentInput.clientType === 'empresa'
+          ? (currentInput.companyContactPerson || currentInput.companyName || 'Responsable Empresa')
+          : (currentInput.clientName || 'Cliente Pintuco'),
+        email: currentInput.clientEmail || 'cliente@pintuco.co',
+        phone: currentInput.clientPhone || '+57 300 123 4567',
+        city: currentInput.clientCity || 'Bogotá D.C.',
         companyName: currentInput.companyName,
         companyNit: currentInput.companyNit,
         contactPerson: currentInput.companyContactPerson
@@ -107,19 +123,19 @@ export default function App() {
       aiAnalysis: { ...aiAnalysis },
       recommendation: { ...recommendation },
       status: 'recibida',
-      assignedTechnician: 'Ing. Carlos Mendoza (IA Especialista)',
-      technicianNotes: `Solicitud originada en asistente digital. Tipo: ${currentInput.clientType === 'empresa' ? 'Empresa / B2B' : 'Particular / Residencial'}. Sistema prescrito: ${recommendation.recommendedSystem}.`,
+      assignedTechnician: 'Ing. Carlos Mendoza (Pintuco Asesoría Técnica)',
+      technicianNotes: `Solicitud originada en Asistente IA ColorLink. Espacio: ${currentInput.specificSpaceSubtype || 'Espacio'} (${currentInput.estimatedM2} m²). Sistema prescrito: ${recommendation.recommendedSystem}.`,
       lastUpdated: 'Ahora'
     };
 
     setRequests((prev) => [newRequest, ...prev]);
     setIsSyncedToDashboard(true);
-    showToast(`¡Solicitud ${newCode} registrada con éxito! Puedes rastrearla en "Mis Solicitudes".`);
+    showToast(`¡Solicitud ${newCode} enviada al equipo técnico de Pintuco con éxito!`);
   };
 
   const handleUpdateStatus = (
     id: string,
-    newStatus: RequestStatus,
+    newStatus: ProjectStatus,
     technicianNotes?: string,
     quotedAmount?: number
   ) => {
@@ -142,109 +158,142 @@ export default function App() {
 
   const handleResetWizard = () => {
     setCurrentInput({
+      transformationTarget: 'hogar',
       clientType: 'particular',
-      clientName: '',
-      clientEmail: '',
-      clientPhone: '',
-      clientCity: 'Madrid',
+      clientName: 'Laura María Restrepo',
+      clientEmail: 'laura.restrepo@pintuco-usuario.co',
+      clientPhone: '+57 312 847 2910',
+      clientCity: 'Bogotá D.C.',
       spaceType: 'hogar',
-      specificArea: 'Salón / Comedor',
+      specificSpaceSubtype: 'Sala / Comedor',
+      specificArea: 'Zona social con muro de acento',
       currentCondition: 'bueno',
-      estimatedM2: 30,
+      estimatedM2: 28,
       trafficLevel: 'medio',
       urgency: 'normal',
       description: '',
       imageUrl: SAMPLE_IMAGES[0].url,
       imageUrls: [SAMPLE_IMAGES[0].url],
-      imageFileName: 'foto_muestra_1.jpg',
-      preferredFinish: 'satinado'
+      imageFileName: 'foto_nuevo_espacio.jpg',
+      preferredFinish: 'satinado',
+      selectedStyle: 'lino-andino',
+      selectedColorName: 'Lino Andino',
+      selectedColorCode: 'PT-104',
+      selectedColorHex: '#EAE5D9'
     });
     setIsSyncedToDashboard(false);
-    showToast('Nueva consulta iniciada.');
+    showToast('Nueva consulta de transformación iniciada.');
   };
 
   const newRequestsCount = requests.filter((r) => r.status === 'recibida' || r.status === 'analizando').length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
+    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans selection:bg-amber-100 selection:text-amber-900">
       
-      {/* Top Global Header */}
+      {/* Top Global Header (Pintuco Brand Identity) */}
       <Header
         currentView={currentView}
         onViewChange={setCurrentView}
         onResetWizard={handleResetWizard}
-        onLoadPreset={handleSelectSampleImage}
+        onLoadPreset={(sample) => {
+          handleSelectSampleImage(sample);
+          setCurrentView('client');
+        }}
+        onOpenProfile={() => setShowProfileModal(true)}
         samples={SAMPLE_IMAGES}
         totalRequestsCount={requests.length}
         newRequestsCount={newRequestsCount}
       />
 
-      {/* Toast Notification Floating */}
+      {/* Floating Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 animate-bounce">
-          <div className="flex items-center space-x-2 px-4 py-3 rounded-2xl bg-slate-900/95 border border-cyan-500/40 text-cyan-300 text-xs font-semibold shadow-2xl shadow-cyan-500/20 backdrop-blur-xl">
-            <Sparkles className="w-4 h-4 text-cyan-400" />
+        <div className="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-50 animate-bounce max-w-sm">
+          <div className="flex items-center space-x-2.5 px-4 py-3 rounded-2xl bg-white border border-amber-300 text-amber-900 text-xs font-semibold shadow-xl shadow-amber-500/10">
+            <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
             <span>{toastMessage}</span>
           </div>
         </div>
       )}
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      {/* Main Container - Responsive with bottom padding for mobile dock */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 pb-24 sm:pb-12">
         
-        {/* View Quick Breadcrumb & Helper Bar */}
-        <div className="mb-6 flex flex-col sm:flex-row items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-slate-900/40 border border-slate-800/80 gap-3">
-          <div className="flex items-center space-x-3 text-xs">
-            <div className={`w-2 h-2 rounded-full ${
-              currentView === 'client' ? 'bg-cyan-400' : currentView === 'requests' ? 'bg-purple-400' : 'bg-emerald-400'
-            } animate-pulse`} />
-            <span className="text-slate-400">
-              Módulo activo:{' '}
-              <strong className="text-white">
-                {currentView === 'client'
-                  ? 'Captura Inteligente & Diagnóstico IA (Experiencia Cliente)'
-                  : currentView === 'requests'
-                  ? 'Rastreador de Expedientes en Tiempo Real (Mis Solicitudes)'
-                  : 'Consola de Gestión Técnica & Peritaje (Equipo Interno)'}
-              </strong>
-            </span>
+        {/* Pintuco Sub-Banner: Inspiration & Context (Only show in non-welcome or as subtle contextual bar) */}
+        {currentView !== 'welcome' && (
+          <div className="mb-6 flex flex-col md:flex-row items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs gap-3">
+            <div className="flex items-center space-x-3 text-xs w-full md:w-auto">
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shrink-0" />
+              <span className="text-slate-600 text-xs truncate">
+                {currentView === 'client' && (
+                  <>
+                    <strong className="text-amber-800 font-semibold">Asistente IA Pintuco:</strong>{' '}
+                    <span>Diagnóstico de espacio, cálculo de rendimiento y recomendación técnica.</span>
+                  </>
+                )}
+                {currentView === 'requests' && (
+                  <>
+                    <strong className="text-blue-700 font-semibold">Mis Solicitudes:</strong>{' '}
+                    <span>Rastreo de expedientes y cotizaciones técnicas en tiempo real.</span>
+                  </>
+                )}
+                {currentView === 'dashboard' && (
+                  <>
+                    <strong className="text-slate-800 font-semibold">Consola Comercial & Técnica:</strong>{' '}
+                    <span>Peritaje de recubrimientos y validación de laboratorio Pintuco.</span>
+                  </>
+                )}
+              </span>
+            </div>
+
+            <div className="hidden sm:flex items-center space-x-2 shrink-0">
+              {currentView !== 'requests' && (
+                <button
+                  onClick={() => setCurrentView('requests')}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-blue-800 border border-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Clock className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Mis Solicitudes ({requests.length})</span>
+                </button>
+              )}
+
+              {currentView !== 'client' && (
+                <button
+                  onClick={() => setCurrentView('client')}
+                  className="text-xs font-bold px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Wand2 className="w-3.5 h-3.5" />
+                  <span>Transformar Espacio</span>
+                </button>
+              )}
+
+              {currentView !== 'dashboard' && (
+                <button
+                  onClick={() => setCurrentView('dashboard')}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Gestión Interna</span>
+                </button>
+              )}
+            </div>
           </div>
+        )}
 
-          <div className="flex items-center space-x-2">
-            {currentView !== 'requests' && (
-              <button
-                onClick={() => setCurrentView('requests')}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-purple-300 border border-purple-500/30 transition-colors flex items-center gap-1.5 cursor-pointer"
-              >
-                <Clock className="w-3.5 h-3.5 text-purple-400" />
-                <span>Rastrear Mis Solicitudes ({requests.length})</span>
-              </button>
-            )}
-
-            {currentView !== 'client' && (
-              <button
-                onClick={() => setCurrentView('client')}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer"
-              >
-                <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Nuevo Diagnóstico IA</span>
-              </button>
-            )}
-
-            {currentView !== 'dashboard' && (
-              <button
-                onClick={() => setCurrentView('dashboard')}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer"
-              >
-                <LayoutDashboard className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Gestión Interna</span>
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Content View */}
-        {currentView === 'client' ? (
+        {/* Dynamic Views */}
+        {currentView === 'welcome' ? (
+          <WelcomeScreen
+            onStartProject={() => {
+              handleResetWizard();
+              setCurrentView('client');
+            }}
+            onViewMyRequests={() => setCurrentView('requests')}
+            onSelectInspirationPreset={(sample) => {
+              handleSelectSampleImage(sample);
+              setCurrentView('client');
+            }}
+            samples={SAMPLE_IMAGES}
+          />
+        ) : currentView === 'client' ? (
           <ClientWizard
             input={currentInput}
             aiAnalysis={aiAnalysis}
@@ -253,7 +302,7 @@ export default function App() {
             onSelectSampleImage={handleSelectSampleImage}
             onSendToDashboard={handleSendToDashboard}
             onScheduleVisit={() => setShowScheduleModal(true)}
-            onRestart={handleResetWizard}
+            onRestart={() => setCurrentView('welcome')}
             onAnswerSmartQuestion={handleAnswerSmartQuestion}
             isSyncedToDashboard={isSyncedToDashboard}
           />
@@ -281,6 +330,18 @@ export default function App() {
 
       </main>
 
+      {/* User Profile Modal (Registro & Contacto) */}
+      {showProfileModal && (
+        <UserProfileModal
+          input={currentInput}
+          onSave={(updates) => {
+            handleInputChange(updates);
+            showToast('Perfil actualizado correctamente.');
+          }}
+          onClose={() => setShowProfileModal(false)}
+        />
+      )}
+
       {/* Schedule Visit Modal */}
       {showScheduleModal && (
         <ScheduleVisitModal
@@ -293,16 +354,31 @@ export default function App() {
         />
       )}
 
-      {/* Footer */}
-      <footer className="border-t border-slate-900 py-6 bg-slate-950/80 text-center text-xs text-slate-500 font-mono">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>COLORLINK AI • Transformando solicitudes en diagnósticos inteligentes</span>
-          <div className="flex items-center space-x-3 text-slate-400">
-            <span>Red Neuronal v4.2</span>
+      {/* Mobile Bottom Dock Bar */}
+      <BottomNav
+        currentView={currentView}
+        onViewChange={setCurrentView}
+        onOpenProfile={() => setShowProfileModal(true)}
+        totalRequestsCount={requests.length}
+        newRequestsCount={newRequestsCount}
+      />
+
+      {/* Footer Pintuco Colombia */}
+      <footer className="border-t border-slate-200 py-6 bg-white text-center text-xs text-slate-500 font-mono hidden sm:block">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center space-x-2 text-slate-600">
+            <span className="font-bold text-amber-800">COLORLINK BY PINTUCO</span>
             <span>•</span>
-            <span>Normativa EN 13300</span>
+            <span>El color de la calidad en Colombia</span>
+          </div>
+          <div className="flex items-center space-x-3 text-slate-500">
+            <span>Viniltex®</span>
             <span>•</span>
-            <span className="text-cyan-400">Frontend MVP Demo</span>
+            <span>Koraza®</span>
+            <span>•</span>
+            <span>Sellomax®</span>
+            <span>•</span>
+            <span className="text-amber-800 font-semibold">Red Neuronal v4.2</span>
           </div>
         </div>
       </footer>
@@ -310,4 +386,3 @@ export default function App() {
     </div>
   );
 }
-

@@ -47,29 +47,29 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
   > = {
     recibida: {
       label: 'Recibida',
-      dotColor: 'bg-emerald-400',
-      badgeClass: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
+      dotColor: 'bg-emerald-500',
+      badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
       stepIndex: 1,
       desc: 'Expediente registrado en el ecosistema ColorLink Pintuco.'
     },
     analizando: {
       label: 'Analizando',
-      dotColor: 'bg-amber-400',
-      badgeClass: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
+      dotColor: 'bg-amber-500',
+      badgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
       stepIndex: 2,
       desc: 'Motor neural de visión procesando patología, humedad y sustrato.'
     },
     revision_tecnica: {
       label: 'Revisión técnica',
-      dotColor: 'bg-blue-400',
-      badgeClass: 'bg-blue-500/10 text-blue-300 border-blue-500/30',
+      dotColor: 'bg-blue-500',
+      badgeClass: 'bg-blue-50 text-blue-800 border-blue-200',
       stepIndex: 3,
       desc: 'Ingeniero de recubrimientos Pintuco validando la prescripción.'
     },
     recomendacion_lista: {
       label: 'Recomendación lista',
-      dotColor: 'bg-purple-400',
-      badgeClass: 'bg-purple-500/10 text-purple-300 border-purple-500/30',
+      dotColor: 'bg-amber-500',
+      badgeClass: 'bg-amber-100 text-amber-900 border-amber-300',
       stepIndex: 4,
       desc: 'Fórmula química, rendimiento en galones y presupuesto finalizados.'
     }
@@ -109,43 +109,43 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
   };
 
   return (
-    <div className="max-w-6xl mx-auto space-y-7 animate-fadeIn">
+    <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 animate-fadeIn text-slate-800">
       
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/30 border border-slate-800 shadow-xl gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm gap-4 text-left">
         <div>
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-mono font-semibold">
-            <Clock className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono font-semibold">
+            <Clock className="w-3.5 h-3.5 text-amber-600" />
             <span>Seguimiento de Expedientes Técnicos Pintuco</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white mt-2 font-display">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 font-display">
             Mis Solicitudes & Proyectos
           </h1>
-          <p className="text-sm text-slate-400 mt-1 max-w-xl">
-            Rastrea en tiempo real el estado de diagnóstico, revisión de perito y cotizaciones de recubrimiento.
+          <p className="text-sm text-slate-600 mt-1 max-w-xl">
+            Rastrea en tiempo real el estado de diagnóstico, revisión de perito y cotizaciones de recubrimiento Pintuco.
           </p>
         </div>
 
         <button
           onClick={onNewRequest}
-          className="inline-flex items-center space-x-2 px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold text-sm shadow-lg shadow-cyan-500/25 transition-all transform hover:scale-[1.02] cursor-pointer"
+          className="min-h-[48px] inline-flex items-center space-x-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-slate-950 font-bold text-sm shadow-md shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
         >
-          <Plus className="w-4 h-4" />
-          <span>Nueva Transformación IA</span>
+          <Plus className="w-4 h-4 text-slate-950" />
+          <span>Nueva Transformación</span>
         </button>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-3 p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
         
         {/* Status Filters */}
         <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           <button
             onClick={() => setSelectedStatusFilter('all')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            className={`min-h-[38px] px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               selectedStatusFilter === 'all'
-                ? 'bg-cyan-500 text-slate-950 font-bold'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-xs'
+                : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
             }`}
           >
             Todos ({requests.length})
@@ -158,10 +158,10 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
               <button
                 key={st}
                 onClick={() => setSelectedStatusFilter(st)}
-                className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                className={`min-h-[38px] inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                   isSelected
-                    ? `${statusConfig[st].badgeClass} font-bold ring-1 ring-cyan-400/40`
-                    : 'bg-slate-800/80 text-slate-300 border-slate-700/60 hover:bg-slate-800'
+                    ? `${statusConfig[st].badgeClass} font-bold`
+                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                 }`}
               >
                 <span className={`w-2 h-2 rounded-full ${statusConfig[st].dotColor}`} />
@@ -173,32 +173,32 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
 
         {/* Search Field */}
         <div className="relative w-full md:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Buscar por código, cliente o espacio..."
-            className="w-full pl-9 pr-4 py-2 rounded-lg bg-slate-950 border border-slate-800 focus:border-cyan-400 focus:outline-none text-xs text-white placeholder:text-slate-500"
+            placeholder="Buscar por código o cliente..."
+            className="w-full min-h-[40px] pl-10 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:border-amber-400 focus:bg-white focus:outline-none text-xs text-slate-800 placeholder:text-slate-400 transition-all"
           />
         </div>
 
       </div>
 
-      {/* Main Grid: Request List + Live Timeline Detail */}
+      {/* Main Grid: Request Cards + Live Timeline Detail */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
         {/* Left Column: Request Cards (7 Cols) */}
         <div className="lg:col-span-7 space-y-3">
           {filteredRequests.length === 0 ? (
-            <div className="p-8 rounded-2xl bg-slate-900/40 border border-slate-800 text-center space-y-3">
-              <p className="text-sm text-slate-400">No se encontraron solicitudes con los filtros aplicados.</p>
+            <div className="p-8 rounded-3xl bg-white border border-slate-200 text-center space-y-3">
+              <p className="text-sm text-slate-500">No se encontraron solicitudes con los filtros aplicados.</p>
               <button
                 onClick={() => {
                   setSelectedStatusFilter('all');
                   setSearchQuery('');
                 }}
-                className="text-xs text-cyan-400 underline font-semibold"
+                className="text-xs text-amber-800 underline font-semibold cursor-pointer"
               >
                 Restablecer filtros
               </button>
@@ -222,41 +222,41 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
                   key={req.id}
                   id={`request-card-${req.id}`}
                   onClick={() => setSelectedRequestForDetail(req)}
-                  className={`group p-5 rounded-2xl border transition-all duration-200 cursor-pointer text-left space-y-3 relative overflow-hidden ${
+                  className={`group p-5 rounded-2xl border transition-all duration-200 cursor-pointer text-left space-y-3 relative overflow-hidden active:scale-[0.99] ${
                     isSelected
-                      ? 'bg-slate-900 border-cyan-500/80 ring-2 ring-cyan-500/20 shadow-xl shadow-cyan-500/10'
-                      : 'bg-slate-900/50 border-slate-800/80 hover:bg-slate-900/90 hover:border-slate-700'
+                      ? 'bg-amber-50/50 border-amber-400 shadow-sm'
+                      : 'bg-white border-slate-200/90 hover:border-slate-300'
                   }`}
                 >
                   <div className="flex items-start justify-between">
                     
                     <div className="flex items-start space-x-3.5">
-                      <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-slate-800 shrink-0 border border-slate-700">
+                      <div className="relative w-14 h-14 rounded-2xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200">
                         <img
                           src={imageUrl}
                           alt={clientName}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                         />
-                        <div className="absolute top-1 left-1 p-0.5 rounded bg-slate-950/80 text-white">
-                          {isParticular ? <Home className="w-3 h-3 text-cyan-400" /> : <Building2 className="w-3 h-3 text-blue-400" />}
+                        <div className="absolute top-1 left-1 p-1 rounded-lg bg-white/90 text-slate-800 shadow-xs">
+                          {isParticular ? <Home className="w-3 h-3 text-amber-600" /> : <Building2 className="w-3 h-3 text-blue-600" />}
                         </div>
                       </div>
 
                       <div>
                         <div className="flex items-center space-x-2">
-                          <span className="text-xs font-mono font-bold text-cyan-400">
+                          <span className="text-xs font-mono font-bold text-amber-800">
                             {req.code || req.id}
                           </span>
-                          <span className="text-[10px] text-slate-500 font-mono">
+                          <span className="text-[10px] text-slate-400 font-mono">
                             • {req.createdAt}
                           </span>
                         </div>
 
-                        <h3 className="text-base font-bold text-white group-hover:text-cyan-200 transition-colors">
+                        <h3 className="text-base font-bold text-slate-900 group-hover:text-amber-800 transition-colors font-display">
                           {companyName ? `${companyName} (${clientName})` : clientName}
                         </h3>
 
-                        <p className="text-xs text-slate-400">
+                        <p className="text-xs text-slate-500">
                           {req.input?.transformationTarget?.toUpperCase() || 'HOGAR'} • {specificArea} ({areaM2} m²)
                         </p>
                       </div>
@@ -264,7 +264,7 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
 
                     {/* Status badge */}
                     <div className="text-right">
-                      <span className={`inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold border ${cfg.badgeClass}`}>
+                      <span className={`inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${cfg.badgeClass}`}>
                         <span className={`w-2 h-2 rounded-full ${cfg.dotColor}`} />
                         <span>{cfg.label}</span>
                       </span>
@@ -273,11 +273,11 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
                   </div>
 
                   {/* Summary & Price strip */}
-                  <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                    <span className="text-slate-400 truncate max-w-[280px]">
+                  <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span className="text-slate-500 truncate max-w-[280px]">
                       {req.recommendation?.recommendedSystem || 'Sistema Pintuco Personalizado'}
                     </span>
-                    <span className="font-mono font-bold text-emerald-400">
+                    <span className="font-mono font-bold text-emerald-700">
                       {formattedPrice}
                     </span>
                   </div>
@@ -290,50 +290,50 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
         {/* Right Column: Live Status Detail & Timeline Drawer (5 Cols) */}
         <div className="lg:col-span-5">
           {selectedRequestForDetail ? (
-            <div className="sticky top-20 p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-2xl space-y-6 text-left">
+            <div className="sticky top-24 p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-6 text-left">
               
               {/* Top Details Card */}
-              <div className="flex items-start justify-between border-b border-slate-800 pb-4">
+              <div className="flex items-start justify-between border-b border-slate-100 pb-4">
                 <div>
-                  <span className="text-xs font-mono font-bold text-cyan-400">
+                  <span className="text-xs font-mono font-bold text-amber-800">
                     EXPEDIENTE: {selectedRequestForDetail.code || selectedRequestForDetail.id}
                   </span>
-                  <h3 className="text-lg font-bold text-white mt-1">
+                  <h3 className="text-lg font-bold text-slate-900 mt-1 font-display">
                     {selectedRequestForDetail.client?.companyName || selectedRequestForDetail.client?.name || selectedRequestForDetail.input?.clientName}
                   </h3>
-                  <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                    <MapPin className="w-3 h-3 text-cyan-400" />
+                  <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                    <MapPin className="w-3.5 h-3.5 text-amber-600" />
                     <span>{selectedRequestForDetail.client?.city || selectedRequestForDetail.input?.clientCity || 'Colombia'}</span>
                   </p>
                 </div>
 
-                <span className={`px-2.5 py-1 rounded-md text-xs font-semibold border ${statusConfig[selectedRequestForDetail.status].badgeClass}`}>
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${statusConfig[selectedRequestForDetail.status].badgeClass}`}>
                   {statusConfig[selectedRequestForDetail.status].label}
                 </span>
               </div>
 
               {/* Status Timeline Progress */}
               <div className="space-y-3">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 font-mono">
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-600 font-mono">
                   Línea de Tiempo del Proyecto
                 </label>
 
-                <div className="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+                <div className="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
                   {getStatusSteps(selectedRequestForDetail.status).map((step, idx) => (
                     <div key={step.key} className="relative">
                       <div className={`absolute -left-6 top-0.5 w-4 h-4 rounded-full flex items-center justify-center border transition-all ${
                         step.isCompleted
-                          ? 'bg-cyan-500 border-cyan-400 text-slate-950'
-                          : 'bg-slate-950 border-slate-700 text-slate-600'
+                          ? 'bg-amber-400 border-amber-500 text-slate-950 shadow-xs'
+                          : 'bg-slate-100 border-slate-300 text-slate-400'
                       }`}>
-                        {step.isCompleted && <CheckCircle2 className="w-3 h-3" />}
+                        {step.isCompleted && <CheckCircle2 className="w-3 h-3 text-slate-950" />}
                       </div>
 
                       <div className="space-y-0.5">
-                        <p className={`text-xs font-bold ${step.isCompleted ? 'text-white' : 'text-slate-500'}`}>
+                        <p className={`text-xs font-bold ${step.isCompleted ? 'text-slate-900' : 'text-slate-400'}`}>
                           {step.label}
                         </p>
-                        <p className="text-[11px] text-slate-400">
+                        <p className="text-[11px] text-slate-500">
                           {statusConfig[step.key as ProjectStatus].desc}
                         </p>
                       </div>
@@ -343,20 +343,20 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
               </div>
 
               {/* Prescribed Solution Snapshot */}
-              <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-                <div className="flex items-center space-x-2 text-xs font-semibold text-cyan-400">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Prescripción IA Aprobada:</span>
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                <div className="flex items-center space-x-2 text-xs font-semibold text-amber-800">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Prescripción Pintuco:</span>
                 </div>
-                <p className="text-sm font-bold text-white">
+                <p className="text-sm font-bold text-slate-900">
                   {selectedRequestForDetail.recommendation.recommendedSystem}
                 </p>
                 <div className="grid grid-cols-2 gap-2 pt-1 text-xs font-mono">
-                  <div className="text-slate-400">
-                    Volumen: <strong className="text-cyan-300">{selectedRequestForDetail.recommendation.calculatedGallons || selectedRequestForDetail.recommendation.calculatedLiters} Gal/L</strong>
+                  <div className="text-slate-500">
+                    Volumen: <strong className="text-slate-900">{selectedRequestForDetail.recommendation.calculatedGallons || selectedRequestForDetail.recommendation.calculatedLiters} Gal/L</strong>
                   </div>
-                  <div className="text-slate-400">
-                    Garantía: <strong className="text-emerald-300">{selectedRequestForDetail.recommendation.warrantyPeriod}</strong>
+                  <div className="text-slate-500">
+                    Garantía: <strong className="text-emerald-700">{selectedRequestForDetail.recommendation.warrantyPeriod}</strong>
                   </div>
                 </div>
               </div>
@@ -365,10 +365,10 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
               <div className="space-y-2 pt-2">
                 <button
                   onClick={() => onSelectRequest(selectedRequestForDetail)}
-                  className="w-full inline-flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition-colors cursor-pointer"
+                  className="w-full min-h-[44px] inline-flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors cursor-pointer shadow-xs"
                 >
                   <Eye className="w-4 h-4" />
-                  <span>Ver Expediente Completo en Gestor</span>
+                  <span>Ver Expediente Completo</span>
                 </button>
 
                 <button
@@ -389,16 +389,16 @@ export const MyRequestsTracker: React.FC<MyRequestsTrackerProps> = ({
                     a.download = `ColorLink-Pintuco-${selectedRequestForDetail.code || selectedRequestForDetail.id}.txt`;
                     a.click();
                   }}
-                  className="w-full inline-flex items-center justify-center space-x-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs border border-slate-700 transition-colors cursor-pointer"
+                  className="w-full min-h-[44px] inline-flex items-center justify-center space-x-2 px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-200 transition-colors cursor-pointer shadow-xs"
                 >
-                  <FileDown className="w-4 h-4" />
+                  <FileDown className="w-4 h-4 text-amber-600" />
                   <span>Descargar Ficha Técnica & Presupuesto</span>
                 </button>
               </div>
 
             </div>
           ) : (
-            <div className="p-8 rounded-2xl bg-slate-900/30 border border-slate-800 text-center text-slate-500 text-xs">
+            <div className="p-8 rounded-3xl bg-white border border-slate-200 text-center text-slate-400 text-xs">
               Selecciona una solicitud para ver el desglose en vivo.
             </div>
           )}

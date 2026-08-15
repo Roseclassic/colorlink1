@@ -11,14 +11,13 @@ import {
   Mail,
   User,
   MapPin,
-  Building2,
   Calendar,
   Layers,
   ShieldCheck,
   ArrowLeft,
   RotateCcw,
   Check,
-  Copy
+  Award
 } from 'lucide-react';
 import {
   AiTechnicalAnalysis,
@@ -54,12 +53,6 @@ export const StepSmartFicha: React.FC<StepSmartFichaProps> = ({
 
   const requestCode = 'CLK-' + Math.floor(8500 + Math.random() * 999);
 
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(requestCode);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2500);
-  };
-
   const handleExportFicha = () => {
     setIsDownloadingPdf(true);
     setTimeout(() => {
@@ -73,122 +66,122 @@ export const StepSmartFicha: React.FC<StepSmartFichaProps> = ({
   );
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-fadeIn">
+    <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8 animate-fadeIn text-slate-800">
       
       {/* Header */}
-      <div className="text-center space-y-2.5">
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-          <CheckCircle2 className="w-3.5 h-3.5" />
+      <div className="text-center space-y-2.5 pt-1">
+        <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
           <span>Ficha Técnica Digital Generada Automáticamente</span>
         </div>
 
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight font-display">
-          Ficha Inteligente <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-emerald-400">ColorLink</span>
+        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-display">
+          Ficha Inteligente <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-yellow-600">ColorLink</span>
         </h2>
         
-        <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto leading-relaxed">
-          Tu diagnóstico, simulación visual y prescripción técnica están consolidados para atención inmediata por el equipo de ingeniería comercial Pintuco.
+        <p className="text-sm sm:text-base text-slate-600 max-w-xl mx-auto leading-relaxed">
+          Tu diagnóstico, simulación visual y prescripción técnica están listos para ser atendidos por asesores técnicos y tiendas Pintuco en Colombia.
         </p>
       </div>
 
-      {/* Quick Contact Micro-Form (Ligero, sin fricción) */}
-      <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-3.5 text-left">
+      {/* Quick Contact Micro-Form */}
+      <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-3.5 text-left">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
-            <User className="w-3.5 h-3.5" />
-            <span>Datos de contacto para entrega y seguimiento comercial:</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-amber-800 flex items-center gap-1.5 font-mono">
+            <User className="w-3.5 h-3.5 text-amber-600" />
+            <span>Datos de contacto para seguimiento y entrega:</span>
           </span>
-          <span className="text-[10px] text-slate-400">Sin formularios largos</span>
+          <span className="text-[10px] text-slate-400 font-mono">Sin trámites complejos</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div>
-            <label className="text-[11px] text-slate-400 block mb-1">Nombre o Empresa:</label>
+            <label className="text-[11px] text-slate-600 block mb-1 font-medium">Nombre o Empresa:</label>
             <input
               type="text"
               value={input.clientName}
               onChange={(e) => onChange({ clientName: e.target.value })}
               placeholder="Ej: Laura Mejía"
-              className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 outline-none"
+              className="w-full bg-slate-50 border border-slate-200 focus:border-amber-400 focus:bg-white rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 outline-none transition-all"
             />
           </div>
 
           <div>
-            <label className="text-[11px] text-slate-400 block mb-1">Teléfono / WhatsApp:</label>
+            <label className="text-[11px] text-slate-600 block mb-1 font-medium">Teléfono / WhatsApp:</label>
             <input
               type="tel"
               value={input.clientPhone}
               onChange={(e) => onChange({ clientPhone: e.target.value })}
               placeholder="+57 312 000 0000"
-              className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 outline-none"
+              className="w-full bg-slate-50 border border-slate-200 focus:border-amber-400 focus:bg-white rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 outline-none font-mono transition-all"
             />
           </div>
 
           <div>
-            <label className="text-[11px] text-slate-400 block mb-1">Ciudad en Colombia:</label>
+            <label className="text-[11px] text-slate-600 block mb-1 font-medium">Ciudad en Colombia:</label>
             <input
               type="text"
               value={input.clientCity}
               onChange={(e) => onChange({ clientCity: e.target.value })}
               placeholder="Bogotá / Medellín / Cali"
-              className="w-full bg-slate-950 border border-slate-800 focus:border-cyan-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 outline-none"
+              className="w-full bg-slate-50 border border-slate-200 focus:border-amber-400 focus:bg-white rounded-xl px-3.5 py-2.5 text-xs text-slate-800 placeholder-slate-400 outline-none transition-all"
             />
           </div>
         </div>
       </div>
 
       {/* THE OFFICIAL DIGITAL TECHNICAL FICHA CARD */}
-      <div id="ficha-tecnica-printable" className="p-6 sm:p-8 rounded-3xl bg-slate-950 border-2 border-slate-800 shadow-2xl space-y-6 text-left relative overflow-hidden">
+      <div id="ficha-tecnica-printable" className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-sm space-y-6 text-left relative overflow-hidden">
         
         {/* Watermark Logo Accent */}
-        <div className="absolute top-4 right-4 text-right opacity-80">
-          <span className="text-[10px] font-mono text-cyan-400 block">ColorLink by Pintuco</span>
-          <span className="text-xs font-mono font-bold text-white tracking-widest">{requestCode}</span>
+        <div className="absolute top-5 right-6 text-right">
+          <span className="text-[11px] font-mono text-amber-800 font-bold block">ColorLink by Pintuco</span>
+          <span className="text-xs font-mono font-bold text-slate-700 tracking-widest">{requestCode}</span>
         </div>
 
         {/* Ficha Header */}
-        <div className="space-y-1 pb-4 border-b border-slate-800">
+        <div className="space-y-1 pb-4 border-b border-slate-100">
           <div className="flex items-center space-x-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider">
+            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-mono text-emerald-800 font-bold uppercase tracking-wider">
               Ficha Prescriptiva Lista para Ejecución
             </span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-bold text-white font-display">
-            Expediente de Transformación de Superficie
+          <h3 className="text-xl sm:text-2xl font-bold text-slate-900 font-display">
+            Expediente de Transformación de Espacio Pintuco
           </h3>
         </div>
 
         {/* Section 1: Client & Space Profile */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-900/60 p-4 rounded-xl border border-slate-800/80">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-50/70 p-4 rounded-2xl border border-slate-200/80">
           <div>
-            <span className="text-[10px] text-slate-400 uppercase font-mono block">Cliente / Titular</span>
-            <strong className="text-white font-medium block truncate">{input.clientName || 'Cliente Particular'}</strong>
+            <span className="text-[10px] text-slate-500 uppercase font-mono block">Cliente / Titular</span>
+            <strong className="text-slate-900 font-semibold block truncate mt-0.5">{input.clientName || 'Cliente Particular'}</strong>
           </div>
           <div>
-            <span className="text-[10px] text-slate-400 uppercase font-mono block">Espacio & Tipo</span>
-            <strong className="text-cyan-300 font-medium block truncate">{input.transformationTarget?.toUpperCase()} &gt; {input.specificSpaceSubtype}</strong>
+            <span className="text-[10px] text-slate-500 uppercase font-mono block">Espacio & Tipo</span>
+            <strong className="text-amber-800 font-semibold block truncate mt-0.5">{input.transformationTarget?.toUpperCase()} &gt; {input.specificSpaceSubtype}</strong>
           </div>
           <div>
-            <span className="text-[10px] text-slate-400 uppercase font-mono block">Metraje Estimado</span>
-            <strong className="text-white font-mono font-bold block">{input.estimatedM2} m²</strong>
+            <span className="text-[10px] text-slate-500 uppercase font-mono block">Metraje Estimado</span>
+            <strong className="text-slate-900 font-mono font-bold block mt-0.5">{input.estimatedM2} m²</strong>
           </div>
           <div>
-            <span className="text-[10px] text-slate-400 uppercase font-mono block">Ubicación</span>
-            <strong className="text-white font-medium block truncate">{input.clientCity || 'Colombia'}</strong>
+            <span className="text-[10px] text-slate-500 uppercase font-mono block">Ubicación</span>
+            <strong className="text-slate-900 font-semibold block truncate mt-0.5">{input.clientCity || 'Colombia'}</strong>
           </div>
         </div>
 
         {/* Section 2: Before & After Visual Evidence */}
         <div className="space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400 block font-mono">
-            Evidencia Fotográfica & Simulación:
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-700 block font-mono">
+            Evidencia Fotográfica & Simulación Pintuco:
           </span>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono">1. Fotografía Actual (Sustrato Base):</span>
-              <div className="h-44 rounded-xl overflow-hidden border border-slate-800 bg-slate-900">
+              <span className="text-[10px] text-slate-500 font-mono">1. Fotografía Actual (Sustrato Base):</span>
+              <div className="h-44 rounded-2xl overflow-hidden border border-slate-200 bg-slate-100">
                 <img
                   src={input.imageUrl}
                   alt="Estado actual"
@@ -198,14 +191,14 @@ export const StepSmartFicha: React.FC<StepSmartFichaProps> = ({
             </div>
 
             <div className="space-y-1">
-              <span className="text-[10px] text-cyan-400 font-mono">2. Simulación Pintuco ({recommendation.selectedColorName}):</span>
-              <div className="h-44 rounded-xl overflow-hidden border border-cyan-500/40 bg-slate-900 relative">
+              <span className="text-[10px] text-amber-800 font-mono font-bold">2. Simulación Pintuco ({recommendation.selectedColorName}):</span>
+              <div className="h-44 rounded-2xl overflow-hidden border border-amber-300 bg-slate-100 relative">
                 <img
-                  src={input.afterImageUrl || recommendation.mainCoatingProduct.features[0] ? input.afterImageUrl || 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80' : input.imageUrl}
+                  src={input.afterImageUrl || 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80'}
                   alt="Simulación Pintuco"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-slate-950/80 text-[10px] text-white font-mono border border-slate-700">
+                <div className="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-full bg-white/95 text-[10px] text-slate-800 font-semibold border border-slate-200 shadow-xs">
                   {recommendation.suggestedFinish}
                 </div>
               </div>
@@ -214,42 +207,42 @@ export const StepSmartFicha: React.FC<StepSmartFichaProps> = ({
         </div>
 
         {/* Section 3: AI Diagnosis Summary */}
-        <div className="space-y-2 bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 text-xs">
-          <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 font-mono block">
-            Diagnóstico de Laboratorio IA:
+        <div className="space-y-2 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/80 text-xs">
+          <span className="text-xs font-bold uppercase tracking-wider text-amber-800 font-mono block">
+            Diagnóstico Técnico de Laboratorio:
           </span>
-          <p className="text-slate-200 leading-relaxed italic">
+          <p className="text-slate-700 leading-relaxed italic">
             "{aiAnalysis.conversationalSummary}"
           </p>
-          <div className="flex flex-wrap gap-4 pt-1 text-[11px] text-slate-400 font-mono">
-            <span>• Sustrato: <strong className="text-slate-200">{aiAnalysis.detectedSurface}</strong></span>
-            <span>• Humedad: <strong className="text-amber-300">{aiAnalysis.moistureIndex}%</strong></span>
-            <span>• Adherencia: <strong className="text-emerald-300">{aiAnalysis.adhesionScore}%</strong></span>
+          <div className="flex flex-wrap gap-4 pt-1 text-[11px] text-slate-500 font-mono">
+            <span>• Sustrato: <strong className="text-slate-900">{aiAnalysis.detectedSurface}</strong></span>
+            <span>• Humedad: <strong className="text-amber-800">{aiAnalysis.moistureIndex}%</strong></span>
+            <span>• Adherencia: <strong className="text-emerald-700">{aiAnalysis.adhesionScore}%</strong></span>
           </div>
         </div>
 
         {/* Section 4: Prescribed System and Dosages */}
-        <div className="space-y-3 bg-gradient-to-br from-cyan-950/30 to-slate-900/70 p-5 rounded-2xl border border-cyan-500/30 text-xs space-y-3">
+        <div className="space-y-3 bg-amber-50/40 p-5 rounded-2xl border border-amber-200/80 text-xs">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-cyan-300 font-mono">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-900 font-mono">
               Solución Técnica Pintuco Prescrita:
             </span>
-            <span className="px-2.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold text-[10px]">
+            <span className="px-3 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold text-[10px] border border-amber-200">
               Garantía: {recommendation.warrantyPeriod}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-200">
-            <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 space-y-1">
-              <span className="text-[10px] text-cyan-400 font-mono uppercase">Imprimación / Barrera:</span>
-              <p className="font-bold text-white text-xs">{recommendation.primerProduct.name}</p>
-              <p className="text-[11px] text-slate-400">Cantidad recomendada: {recommendation.calculatedPrimerLiters} Litros</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-slate-700">
+            <div className="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1">
+              <span className="text-[10px] text-blue-700 font-mono uppercase font-bold">Imprimación / Barrera:</span>
+              <p className="font-bold text-slate-900 text-xs">{recommendation.primerProduct.name}</p>
+              <p className="text-[11px] text-slate-500">Cantidad recomendada: {recommendation.calculatedPrimerLiters} Litros</p>
             </div>
 
-            <div className="p-3 rounded-lg bg-slate-950/80 border border-slate-800 space-y-1">
-              <span className="text-[10px] text-amber-300 font-mono uppercase">Pintura de Acabado:</span>
-              <p className="font-bold text-white text-xs">{recommendation.mainCoatingProduct.name}</p>
-              <p className="text-[11px] text-slate-400">
+            <div className="p-3.5 rounded-xl bg-white border border-slate-200 space-y-1">
+              <span className="text-[10px] text-amber-800 font-mono uppercase font-bold">Pintura de Acabado:</span>
+              <p className="font-bold text-slate-900 text-xs">{recommendation.mainCoatingProduct.name}</p>
+              <p className="text-[11px] text-slate-500">
                 Cantidad: {recommendation.calculatedGallons} Galones • Color: {recommendation.selectedColorName}
               </p>
             </div>
@@ -258,7 +251,7 @@ export const StepSmartFicha: React.FC<StepSmartFichaProps> = ({
 
       </div>
 
-      {/* Action Buttons & Transmission to Commercial / WhatsApp */}
+      {/* Action Buttons & Transmission */}
       <div className="space-y-4 pt-2">
         
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -267,21 +260,21 @@ export const StepSmartFicha: React.FC<StepSmartFichaProps> = ({
           <button
             id="btn-send-ficha-dashboard"
             onClick={onSendToDashboard}
-            className={`p-3.5 rounded-xl font-semibold text-xs transition-all flex items-center justify-center space-x-2 cursor-pointer ${
+            className={`min-h-[48px] p-3.5 rounded-2xl font-bold text-xs transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95 ${
               isSyncedToDashboard
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                : 'bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 text-white shadow-lg shadow-cyan-500/20 hover:scale-[1.02]'
+                ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                : 'bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-slate-950 shadow-lg shadow-amber-500/20 hover:scale-[1.01]'
             }`}
           >
             {isSyncedToDashboard ? (
               <>
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>Solicitud Registrada (Estado: Recibida)</span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Solicitud Recibida por Pintuco</span>
               </>
             ) : (
               <>
                 <Send className="w-4 h-4" />
-                <span>Transmitir a Atención Técnica</span>
+                <span>Enviar al Asesor Pintuco</span>
               </>
             )}
           </button>
@@ -291,7 +284,7 @@ export const StepSmartFicha: React.FC<StepSmartFichaProps> = ({
             href={`https://wa.me/573001234567?text=${whatsappMessage}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-3.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-600 text-white font-semibold text-xs shadow-md transition-all flex items-center justify-center space-x-2 cursor-pointer"
+            className="min-h-[48px] p-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95"
           >
             <MessageCircle className="w-4 h-4" />
             <span>Consultar por WhatsApp</span>
@@ -300,19 +293,19 @@ export const StepSmartFicha: React.FC<StepSmartFichaProps> = ({
           {/* Export PDF / Print */}
           <button
             onClick={handleExportFicha}
-            className="p-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 font-semibold text-xs transition-all flex items-center justify-center space-x-2 cursor-pointer"
+            className="min-h-[48px] p-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-semibold text-xs transition-all flex items-center justify-center space-x-2 cursor-pointer shadow-xs active:scale-95"
           >
-            <Download className="w-4 h-4 text-cyan-400" />
+            <Download className="w-4 h-4 text-amber-600" />
             <span>{isDownloadingPdf ? 'Generando PDF...' : 'Descargar / Imprimir Ficha'}</span>
           </button>
 
         </div>
 
         {/* Secondary Restart / Back navigation */}
-        <div className="flex items-center justify-between pt-2">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
           <button
             onClick={onBack}
-            className="px-4 py-2.5 rounded-xl text-slate-400 hover:text-white text-xs font-medium flex items-center space-x-1.5 cursor-pointer"
+            className="px-4 py-2.5 rounded-xl text-slate-500 hover:text-slate-900 text-xs font-medium flex items-center space-x-1.5 cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Volver a Recomendación</span>
@@ -320,7 +313,7 @@ export const StepSmartFicha: React.FC<StepSmartFichaProps> = ({
 
           <button
             onClick={onRestart}
-            className="px-4 py-2.5 rounded-xl text-slate-400 hover:text-cyan-300 text-xs font-medium flex items-center space-x-1.5 cursor-pointer"
+            className="px-4 py-2.5 rounded-xl text-slate-500 hover:text-amber-700 text-xs font-medium flex items-center space-x-1.5 cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Iniciar Nueva Transformación</span>

@@ -41,28 +41,28 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-7 text-left space-y-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn text-slate-800">
+      <div className="relative w-full max-w-lg bg-white border border-slate-200 rounded-3xl shadow-2xl overflow-hidden p-6 sm:p-7 text-left space-y-5">
         
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2.5">
-            <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <div className="p-2.5 rounded-xl bg-amber-50 text-amber-600 border border-amber-200">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white font-display">
+              <h3 className="text-lg font-bold text-slate-900 font-display">
                 Agendar Inspección Técnica
               </h3>
-              <p className="text-xs text-slate-400">
-                Verificación in-situ y toma de muestras de humedad
+              <p className="text-xs text-slate-500">
+                Verificación in-situ y asesoría técnica de expertos Pintuco
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -70,7 +70,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
 
         {/* Date Selector */}
         <div className="space-y-2">
-          <label className="block text-xs font-semibold uppercase font-mono text-slate-300">
+          <label className="block text-xs font-bold uppercase font-mono text-slate-700">
             1. Selecciona Fecha
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -81,12 +81,12 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                 onClick={() => setSelectedDate(d.date)}
                 className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
                   selectedDate === d.date
-                    ? 'bg-cyan-500/20 border-cyan-400 text-white font-bold'
-                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white'
+                    ? 'bg-amber-50 border-amber-500 text-amber-900 font-bold shadow-xs'
+                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                 }`}
               >
                 <div className="text-xs">{d.label}</div>
-                <div className="text-[10px] text-cyan-400 font-mono mt-0.5">{d.slots}</div>
+                <div className="text-[10px] text-amber-700 font-mono mt-0.5">{d.slots}</div>
               </button>
             ))}
           </div>
@@ -94,7 +94,7 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
 
         {/* Time Slots */}
         <div className="space-y-2">
-          <label className="block text-xs font-semibold uppercase font-mono text-slate-300">
+          <label className="block text-xs font-bold uppercase font-mono text-slate-700">
             2. Franja Horaria
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -105,8 +105,8 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
                 onClick={() => setSelectedTime(slot)}
                 className={`py-2 px-3 rounded-xl border text-xs font-mono transition-all cursor-pointer ${
                   selectedTime === slot
-                    ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 font-bold'
-                    : 'bg-slate-950/60 border-slate-800 text-slate-400 hover:text-white'
+                    ? 'bg-amber-50 border-amber-500 text-amber-900 font-bold'
+                    : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                 }`}
               >
                 {slot}
@@ -116,14 +116,14 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
         </div>
 
         {/* Location & Client Info */}
-        <div className="p-3.5 rounded-2xl bg-slate-950/70 border border-slate-800 space-y-1 text-xs">
-          <div className="flex items-center space-x-1.5 text-slate-300">
-            <User className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Contacto: <strong className="text-white">{input.clientName || 'Cliente ColorLink'}</strong> ({input.clientCity || 'Madrid'})</span>
+        <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1 text-xs">
+          <div className="flex items-center space-x-1.5 text-slate-700">
+            <User className="w-3.5 h-3.5 text-amber-600" />
+            <span>Contacto: <strong className="text-slate-900">{input.clientName || 'Cliente ColorLink'}</strong> ({input.clientCity || 'Bogotá D.C.'})</span>
           </div>
-          <div className="flex items-center space-x-1.5 text-slate-400">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Visita técnica gratuita incluida en el diagnóstico digital</span>
+          <div className="flex items-center space-x-1.5 text-slate-500">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Visita técnica respaldada por Pintuco Colombia</span>
           </div>
         </div>
 
@@ -133,13 +133,13 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
           onClick={handleBooking}
           className={`w-full py-3.5 px-4 rounded-xl font-bold text-sm flex items-center justify-center space-x-2 transition-all cursor-pointer ${
             isSuccess
-              ? 'bg-emerald-500 text-slate-950'
-              : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/25'
+              ? 'bg-emerald-600 text-white'
+              : 'bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-slate-950 shadow-md shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99]'
           }`}
         >
           {isSuccess ? (
             <>
-              <CheckCircle2 className="w-4 h-4" />
+              <CheckCircle2 className="w-4 h-4 text-white" />
               <span>¡Cita Reservada con Éxito!</span>
             </>
           ) : (

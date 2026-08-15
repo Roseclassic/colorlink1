@@ -5,12 +5,10 @@ import {
   CheckCircle2,
   Layers,
   Camera,
-  Cpu,
-  FileText,
-  UserCheck,
-  Award,
   Eye,
-  Sliders
+  FileText,
+  Award,
+  ChevronLeft
 } from 'lucide-react';
 import {
   AiTechnicalAnalysis,
@@ -35,6 +33,7 @@ interface ClientWizardProps {
   onRestart: () => void;
   onAnswerSmartQuestion?: (questionId: string, answer: string) => void;
   isSyncedToDashboard: boolean;
+  onBackToWelcome?: () => void;
 }
 
 export const ClientWizard: React.FC<ClientWizardProps> = ({
@@ -47,29 +46,44 @@ export const ClientWizard: React.FC<ClientWizardProps> = ({
   onScheduleVisit,
   onRestart,
   onAnswerSmartQuestion,
-  isSyncedToDashboard
+  isSyncedToDashboard,
+  onBackToWelcome
 }) => {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const stepsList = [
-    { num: 1, label: '1. Transformación', shortLabel: 'Espacio', icon: Layers },
-    { num: 2, label: '2. Tu Espacio', shortLabel: 'Foto', icon: Camera },
-    { num: 3, label: '3. Diagnóstico & Antes/Después', shortLabel: 'Simulación', icon: Eye },
-    { num: 4, label: '4. Recomendación', shortLabel: 'Pintuco', icon: Award },
-    { num: 5, label: '5. Ficha Digital', shortLabel: 'Ficha', icon: FileText }
+    { num: 1, label: '1. Inspiración & Espacio', shortLabel: 'Espacio', icon: Layers },
+    { num: 2, label: '2. Foto de tu Muro', shortLabel: 'Fotos', icon: Camera },
+    { num: 3, label: '3. Diagnóstico IA', shortLabel: 'IA & Color', icon: Eye },
+    { num: 4, label: '4. Recomendación Pintuco', shortLabel: 'Solución', icon: Award },
+    { num: 5, label: '5. Ficha & Asesoría', shortLabel: 'Ficha', icon: FileText }
   ];
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="space-y-6 sm:space-y-8 animate-fadeIn">
       
-      {/* Visual Stepper Navigation Bar */}
+      {/* Top Breadcrumb / Stepper Navigation (Limpio, Blanco, Suave) */}
       <div className="max-w-4xl mx-auto px-2 sm:px-4">
-        <div className="flex items-center justify-between relative">
+        
+        {/* Back to Home Link */}
+        {onBackToWelcome && currentStep === 1 && (
+          <div className="mb-3 text-left">
+            <button
+              onClick={onBackToWelcome}
+              className="inline-flex items-center space-x-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+            >
+              <ChevronLeft className="w-4 h-4 text-amber-600" />
+              <span>Volver a la portada</span>
+            </button>
+          </div>
+        )}
+
+        <div className="flex items-center justify-between relative py-2">
           
-          {/* Connecting line */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 w-full bg-slate-800 -z-0" />
+          {/* Connecting Track Line */}
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 h-1 w-full bg-slate-200 -z-0 rounded-full" />
           <div
-            className="absolute left-0 top-1/2 -translate-y-1/2 h-0.5 bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-400 transition-all duration-500 -z-0"
+            className="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-500 -z-0 rounded-full shadow-sm shadow-amber-300"
             style={{ width: `${((currentStep - 1) / (stepsList.length - 1)) * 100}%` }}
           />
 
@@ -90,32 +104,32 @@ export const ClientWizard: React.FC<ClientWizardProps> = ({
                 className={`relative z-10 flex flex-col items-center group cursor-pointer disabled:cursor-not-allowed`}
               >
                 <div
-                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all duration-300 font-mono text-xs font-bold ${
+                  className={`w-9 h-9 sm:w-11 sm:h-11 rounded-2xl flex items-center justify-center transition-all duration-300 font-mono text-xs font-bold ${
                     isCurrent
-                      ? 'bg-cyan-500 text-slate-950 ring-4 ring-cyan-500/20 shadow-lg shadow-cyan-500/30 scale-110'
+                      ? 'bg-gradient-to-br from-amber-400 to-yellow-400 text-slate-950 ring-4 ring-amber-200 shadow-md shadow-amber-500/20 scale-110'
                       : isPassed
-                      ? 'bg-slate-800 text-cyan-400 border border-cyan-500/40'
-                      : 'bg-slate-900 text-slate-500 border border-slate-800'
+                      ? 'bg-white text-amber-700 border-2 border-amber-500 shadow-sm'
+                      : 'bg-white text-slate-400 border border-slate-200'
                   }`}
                 >
-                  {isPassed ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
+                  {isPassed ? <CheckCircle2 className="w-4 h-4 text-amber-600" /> : <Icon className="w-4 h-4" />}
                 </div>
 
                 <span
-                  className={`mt-1.5 text-[10px] sm:text-xs font-medium tracking-tight transition-colors hidden sm:block ${
+                  className={`mt-1.5 text-[11px] sm:text-xs font-semibold tracking-tight transition-colors hidden sm:block ${
                     isCurrent
-                      ? 'text-cyan-400 font-bold'
+                      ? 'text-amber-800 font-bold'
                       : isPassed
-                      ? 'text-slate-300'
-                      : 'text-slate-500'
+                      ? 'text-slate-700'
+                      : 'text-slate-400'
                   }`}
                 >
                   {step.label}
                 </span>
 
                 <span
-                  className={`mt-1 text-[9px] font-medium transition-colors sm:hidden ${
-                    isCurrent ? 'text-cyan-400 font-bold' : 'text-slate-500'
+                  className={`mt-1 text-[10px] font-semibold transition-colors sm:hidden ${
+                    isCurrent ? 'text-amber-800 font-bold' : 'text-slate-400'
                   }`}
                 >
                   {step.shortLabel}
@@ -128,7 +142,7 @@ export const ClientWizard: React.FC<ClientWizardProps> = ({
       </div>
 
       {/* Step Content Switcher */}
-      <div className="min-h-[520px]">
+      <div className="min-h-[480px]">
         {currentStep === 1 && (
           <StepTransformationType
             input={input}
