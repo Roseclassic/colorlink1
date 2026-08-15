@@ -1,0 +1,6 @@
+{
+  "name": "ColorLink - Asistente Inteligente de Pintura e IA",
+  "description": "Plataforma inteligente que transforma solicitudes de pintura y recubrimientos con captura conversacional, diagnóstico de visión IA y gestión integral.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
