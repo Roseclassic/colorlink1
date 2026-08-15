@@ -13,7 +13,7 @@ export function runAiSurfaceDiagnostics(input: ClientProjectInput): {
   recommendation: TechnicalRecommendation;
 } {
   const m2 = input.estimatedM2 > 0 ? input.estimatedM2 : 28;
-  const isConstructivo = input.transformationTarget === 'constructivo' || input.clientType === 'constructor';
+  const isConstructivo = input.transformationTarget === 'constructivo';
   const isEmpresa = input.transformationTarget === 'empresa' || input.clientType === 'empresa';
   const isExterior = input.specificSpaceSubtype?.toLowerCase().includes('exterior') || 
                     input.specificSpaceSubtype?.toLowerCase().includes('fachada') ||

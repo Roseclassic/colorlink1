@@ -1,26 +1,81 @@
 export type TransformationTarget = 'hogar' | 'empresa' | 'constructivo';
 
-export type SpaceType = 'hogar' | 'oficina' | 'comercio' | 'industria' | 'constructivo';
+// ENUM: Tipo de espacio (hogar / oficina / comercio / industria)
+export type SpaceType = 'hogar' | 'oficina' | 'comercio' | 'industria';
 
-export type ClientType = 'particular' | 'empresa' | 'constructor';
+// ENUM: Tipo de cliente (particular / empresa)
+export type ClientType = 'particular' | 'empresa';
 
-export type SurfaceCondition = 'bueno' | 'humedad' | 'desconchado' | 'moho' | 'fisuras' | 'oxido' | 'manchas';
+// ENUM: Tipo de superficie (concreto / madera / metal / drywall)
+export type SurfaceType = 'concreto' | 'madera' | 'metal' | 'drywall';
+
+// ENUM: Estado de la superficie (nuevo / desgaste / humedad / reparacion)
+export type SurfaceConditionEnum = 'nuevo' | 'desgaste' | 'humedad' | 'reparacion';
+
+// Backward-compatibility alias
+export type SurfaceCondition = SurfaceConditionEnum | 'bueno' | 'desconchado' | 'moho' | 'fisuras' | 'oxido' | 'manchas';
 
 export type TrafficLevel = 'bajo' | 'medio' | 'alto' | 'extremo';
 
 export type FinishType = 'mate' | 'satinado' | 'semibrillante' | 'brillante' | 'texturado';
 
-// Estados solicitados: 🟢 Recibida, 🟡 Analizando, 🔵 Revisión técnica, 🟣 Recomendación lista
-export type RequestStatus = 'recibida' | 'analizando' | 'revision_tecnica' | 'recomendacion_lista';
+// Categoría de evidencia fotográfica
+export type EvidenceCategory = 'muro_principal' | 'detalle_dano' | 'panoramica' | 'techo' | 'otro';
+
+// 7 Estados del proceso en orden secuencial:
+// 1. Nueva solicitud (nueva / recibida)
+// 2. Información pendiente (info_pendiente)
+// 3. Analizando IA (analizando)
+// 4. Validación técnica (validacion_tecnica / revision_tecnica)
+// 5. Recomendación generada (recomendacion_generada / recomendacion_lista)
+// 6. Gestión comercial/operativa (gestion_comercial)
+// 7. Finalizada (finalizada)
+export type RequestStatus =
+  | 'nueva'
+  | 'recibida'
+  | 'info_pendiente'
+  | 'analizando'
+  | 'validacion_tecnica'
+  | 'revision_tecnica'
+  | 'recomendacion_generada'
+  | 'recomendacion_lista'
+  | 'gestion_comercial'
+  | 'finalizada';
+
 export type ProjectStatus = RequestStatus;
 
-export interface ProjectImage {
+// Perfil de Usuario / Cliente
+export interface ClientUser {
   id: string;
-  url: string;
-  fileName: string;
-  caption?: string;
-  source?: 'upload' | 'camera' | 'sample';
+  name: string;
+  email: string;
+  phone: string;
+  city: string;
+  clientType: ClientType;
+  companyName?: string;
+  companyNit?: string;
+  avatarUrl?: string;
+  registeredDate: string;
+  activeProjectsCount: number;
 }
+
+// OBJETO DE EVIDENCIA FOTOGRÁFICA
+export interface PhotoEvidence {
+  id: string;
+  archivo: string; // Nombre del archivo (STRING)
+  tipo: string; // Tipo MIME (STRING, ej: 'image/jpeg')
+  fechaCarga: string; // Fecha de carga (DATE ISO 8601 string)
+  descripcion: string; // Descripción asociada (STRING)
+  categoria: EvidenceCategory; // Categoría de imagen (ENUM)
+  url: string; // URL o Data URL
+  tamanioBytes?: number; // Tamaño en bytes (NUMBER)
+  fileName?: string; // Alias de compatibilidad
+  caption?: string; // Alias de compatibilidad
+  source?: 'sample' | 'upload' | 'camera'; // Origen de la foto
+}
+
+// Alias for backward compatibility
+export type ProjectImage = PhotoEvidence;
 
 export interface TransformationStyleOption {
   id: string;
@@ -48,6 +103,8 @@ export interface SampleImageOption {
   defaultDescription: string;
   areaM2: number;
   locationCity?: string;
+  surfaceType?: SurfaceType;
+  conditionEnum?: SurfaceConditionEnum;
   recommendedColor?: {
     name: string;
     hex: string;
@@ -63,48 +120,58 @@ export interface SmartAiQuestion {
   answeredOption?: string;
 }
 
+// MODELO DE ENTRADA CLIENTE (CAMPOS TIPADOS CON STRING, NUMBER, DATE, BOOLEAN, ENUM)
 export interface ClientProjectInput {
-  // Nueva propuesta: "¿Qué quieres transformar?"
+  // ENUMS
   transformationTarget: TransformationTarget;
-  clientType: ClientType;
+  clientType: ClientType; // 'particular' | 'empresa'
+  spaceType: SpaceType; // 'hogar' | 'oficina' | 'comercio' | 'industria'
+  surfaceType: SurfaceType; // 'concreto' | 'madera' | 'metal' | 'drywall'
+  currentConditionEnum: SurfaceConditionEnum; // 'nuevo' | 'desgaste' | 'humedad' | 'reparacion'
   
-  // Particular client
+  // STRINGS (Datos de cliente e información general)
   clientName: string;
   clientEmail: string;
   clientPhone: string;
   clientCity: string;
-
-  // Empresa / Constructivo client
   companyName?: string;
   companyNit?: string;
   companyContactPerson?: string;
+  specificSpaceSubtype: string; // ej: "Sala / Comedor", "Fachada", etc.
+  specificArea: string; // Subzona o ubicación
+  description: string; // Descripción del problema (STRING)
+  observations?: string; // Observaciones adicionales (STRING)
 
-  // Contexto del espacio adaptado
-  specificSpaceSubtype: string; // ej: "Habitación", "Sala", "Oficina", "Fachada gran formato"
-  housingGoal?: 'Cambio de color & Estilo' | 'Renovación integral' | 'Reparación de daños / Humedad' | 'Obra nueva';
+  // NUMBERS (Cantidades, áreas y valores numéricos)
+  estimatedM2: number; // Área aproximada en m² (NUMBER)
+  spacesCount: number; // Cantidad de espacios (NUMBER)
+  estimatedBudget?: number; // Presupuesto estimado en COP (NUMBER)
 
-  // General details
-  spaceType: SpaceType;
-  specificArea: string;
-  currentCondition: SurfaceCondition;
-  estimatedM2: number;
-  trafficLevel: TrafficLevel;
-  urgency: 'normal' | 'alta' | 'inmediata';
-  description: string;
-  
-  // Photos
+  // DATES (Fechas en formato YYYY-MM-DD o ISO string)
+  requiredProjectDate: string; // Fecha requerida del proyecto (DATE: YYYY-MM-DD)
+  createdAt: string; // Fecha de creación de solicitud (DATE ISO string)
+
+  // BOOLEANS (Banderas lógicas)
+  hasMoisture: boolean; // Tiene humedad (BOOLEAN)
+  hasCracks: boolean; // Tiene grietas (BOOLEAN)
+  acceptsTerms: boolean; // Acepta términos y condiciones (BOOLEAN)
+  requiresTechnicalVisit: boolean; // Requiere visita técnica (BOOLEAN)
+
+  // OBJETOS DE EVIDENCIA (ARCHIVOS)
+  evidences: PhotoEvidence[]; // Lista de objetos de evidencia estructurados
   imageUrl: string;
   afterImageUrl?: string;
   imageFileName?: string;
-  images?: ProjectImage[];
 
-  // Transformation simulation selection
+  // ESTILO Y SIMULACIÓN
+  currentCondition?: SurfaceCondition;
+  trafficLevel?: TrafficLevel;
+  urgency?: 'normal' | 'alta' | 'inmediata';
   selectedColorHex?: string;
   selectedColorName?: string;
   selectedColorCode?: string;
-  selectedFinish: FinishType;
+  selectedFinish?: FinishType;
   selectedStyle?: string;
-
   aiFollowUpAnswer?: string;
 }
 
@@ -187,6 +254,71 @@ export interface TechnicalRecommendation {
   }[];
 }
 
+// ESTRUCTURA ESTÁNDAR PARA INTEGRACIÓN CON API Y BASE DE DATOS
+export interface ApiClientData {
+  tipo: ClientType; // 'particular' | 'empresa'
+  nombre: string; // STRING
+  empresa?: string; // STRING
+  nit?: string; // STRING
+  correo: string; // STRING
+  telefono: string; // STRING
+  ciudad: string; // STRING
+}
+
+export interface ApiProjectData {
+  tipoEspacio: SpaceType; // ENUM: 'hogar' | 'oficina' | 'comercio' | 'industria'
+  subtipoEspacio: string; // STRING
+  tipoSuperficie: SurfaceType; // ENUM: 'concreto' | 'madera' | 'metal' | 'drywall'
+  estadoSuperficie: SurfaceConditionEnum; // ENUM: 'nuevo' | 'desgaste' | 'humedad' | 'reparacion'
+  area: number; // NUMBER: m²
+  cantidadEspacios: number; // NUMBER: conteo de espacios
+  presupuestoEstimado?: number; // NUMBER: COP
+  fechaRequerida: string; // DATE: YYYY-MM-DD
+  fechaCreacion: string; // DATE: ISO 8601
+  tieneHumedad: boolean; // BOOLEAN
+  tieneGrietas: boolean; // BOOLEAN
+  requiereVisitaTecnica: boolean; // BOOLEAN
+  aceptaTerminos: boolean; // BOOLEAN
+  descripcionProblema: string; // STRING
+  observaciones?: string; // STRING
+  colorSugerido?: {
+    nombre: string;
+    codigo: string;
+    hex: string;
+  };
+  acabadoPreferido?: string;
+}
+
+export interface ApiAiAnalysisData {
+  condicion: SurfaceConditionEnum;
+  confianza: number; // NUMBER (ej: 92)
+  sustratoDetectado: string;
+  humedadDetectadaIndice: number;
+  problemaPrincipal: string;
+  sistemaRecomendado: string;
+  familiaPintuco: string;
+  litrosCalculados: number;
+  galonesCalculados: number;
+  costoEstimadoMin: number;
+  costoEstimadoMax: number;
+  garantia: string;
+  resumenConversacional: string;
+}
+
+export interface ApiProjectSubmissionPayload {
+  idSolicitud: string;
+  codigo: string;
+  cliente: ApiClientData;
+  proyecto: ApiProjectData;
+  evidencia: PhotoEvidence[];
+  analisisIA: ApiAiAnalysisData;
+  meta: {
+    versionApi: string;
+    origen: string;
+    timestamp: string;
+  };
+}
+
 export interface ProjectRequest {
   id: string;
   code: string;
@@ -209,4 +341,6 @@ export interface ProjectRequest {
   assignedTechnician?: string;
   quotedAmount?: number;
   lastUpdated?: string;
+  apiPayload?: ApiProjectSubmissionPayload;
 }
+

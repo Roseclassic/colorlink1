@@ -1,44 +1,71 @@
 import React, { useMemo, useState } from 'react';
-import { Header } from './components/Header';
+import { Header, PortalType, ClientSubView, DashboardSubView } from './components/Header';
 import { BottomNav } from './components/BottomNav';
+import { ClientAuthModal } from './components/client/ClientAuthModal';
 import { UserProfileModal } from './components/UserProfileModal';
 import { WelcomeScreen } from './components/client/WelcomeScreen';
 import { ClientWizard } from './components/client/ClientWizard';
 import { MyRequestsTracker } from './components/client/MyRequestsTracker';
 import { InternalDashboard } from './components/dashboard/InternalDashboard';
 import { ScheduleVisitModal } from './components/ScheduleVisitModal';
-import { INITIAL_REQUESTS, SAMPLE_IMAGES, SPACE_OPTIONS } from './data/mockData';
+import { INITIAL_REQUESTS, SAMPLE_IMAGES, SPACE_OPTIONS, PROCESS_STAGES } from './data/mockData';
 import {
   ClientProjectInput,
   ProjectRequest,
-  ProjectStatus,
-  SampleImageOption
+  RequestStatus,
+  SampleImageOption,
+  ClientUser
 } from './types';
 import { runAiSurfaceDiagnostics } from './utils/aiDiagnostics';
 import {
   Sparkles,
   Wand2,
   LayoutDashboard,
-  Clock
+  Clock,
+  Building2,
+  User,
+  ArrowRightLeft,
+  Layers,
+  ShieldCheck,
+  CheckCircle2
 } from 'lucide-react';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'welcome' | 'client' | 'requests' | 'dashboard'>('welcome');
+  const [activePortal, setActivePortal] = useState<PortalType>('cliente');
+  const [clientView, setClientView] = useState<ClientSubView>('welcome');
+  const [dashboardTab, setDashboardTab] = useState<DashboardSubView>('pipeline');
+
   const [requests, setRequests] = useState<ProjectRequest[]>(INITIAL_REQUESTS);
   const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false);
+  const [showAuthModal, setShowAuthModal] = useState<boolean>(false);
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
   const [isSyncedToDashboard, setIsSyncedToDashboard] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Authenticated user state (Default logged-in sample user)
+  const [currentUser, setCurrentUser] = useState<ClientUser | null>({
+    id: 'usr-001',
+    name: 'Laura María Restrepo',
+    email: 'laura.restrepo@pintuco-usuario.co',
+    phone: '+57 312 847 2910',
+    city: 'Bogotá D.C.',
+    clientType: 'particular',
+    registeredDate: '2026-08-10',
+    activeProjectsCount: 2,
+    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
+  });
 
   // Default input state with Colombian context
   const defaultInitialSample = SAMPLE_IMAGES[0];
   const [currentInput, setCurrentInput] = useState<ClientProjectInput>({
     transformationTarget: 'hogar',
-    clientType: 'particular',
-    clientName: 'Laura María Restrepo',
-    clientEmail: 'laura.restrepo@pintuco-usuario.co',
-    clientPhone: '+57 312 847 2910',
-    clientCity: 'Bogotá D.C.',
+    clientType: currentUser?.clientType || 'particular',
+    clientName: currentUser?.name || 'Laura María Restrepo',
+    clientEmail: currentUser?.email || 'laura.restrepo@pintuco-usuario.co',
+    clientPhone: currentUser?.phone || '+57 312 847 2910',
+    clientCity: currentUser?.city || 'Bogotá D.C.',
+    companyName: currentUser?.companyName,
+    companyNit: currentUser?.companyNit,
     spaceType: 'hogar',
     specificSpaceSubtype: 'Sala / Comedor',
     specificArea: 'Zona social con muro de acento',
@@ -57,7 +84,7 @@ export default function App() {
     selectedColorHex: '#EAE5D9'
   });
 
-  // Calculate live AI diagnostic & coating recommendation
+  // Live AI diagnostic & coating recommendation
   const { aiAnalysis, recommendation } = useMemo(() => {
     return runAiSurfaceDiagnostics(currentInput);
   }, [currentInput]);
@@ -111,31 +138,31 @@ export default function App() {
       client: {
         name: currentInput.clientType === 'empresa'
           ? (currentInput.companyContactPerson || currentInput.companyName || 'Responsable Empresa')
-          : (currentInput.clientName || 'Cliente Pintuco'),
-        email: currentInput.clientEmail || 'cliente@pintuco.co',
-        phone: currentInput.clientPhone || '+57 300 123 4567',
-        city: currentInput.clientCity || 'Bogotá D.C.',
-        companyName: currentInput.companyName,
-        companyNit: currentInput.companyNit,
+          : (currentInput.clientName || currentUser?.name || 'Cliente Pintuco'),
+        email: currentInput.clientEmail || currentUser?.email || 'cliente@pintuco.co',
+        phone: currentInput.clientPhone || currentUser?.phone || '+57 300 123 4567',
+        city: currentInput.clientCity || currentUser?.city || 'Bogotá D.C.',
+        companyName: currentInput.companyName || currentUser?.companyName,
+        companyNit: currentInput.companyNit || currentUser?.companyNit,
         contactPerson: currentInput.companyContactPerson
       },
       input: { ...currentInput },
       aiAnalysis: { ...aiAnalysis },
       recommendation: { ...recommendation },
-      status: 'recibida',
+      status: 'nueva',
       assignedTechnician: 'Ing. Carlos Mendoza (Pintuco Asesoría Técnica)',
-      technicianNotes: `Solicitud originada en Asistente IA ColorLink. Espacio: ${currentInput.specificSpaceSubtype || 'Espacio'} (${currentInput.estimatedM2} m²). Sistema prescrito: ${recommendation.recommendedSystem}.`,
+      technicianNotes: `Solicitud registrada en Asistente IA ColorLink. Espacio: ${currentInput.specificSpaceSubtype || 'Espacio'} (${currentInput.estimatedM2} m²). Sistema formulado: ${recommendation.recommendedSystem}.`,
       lastUpdated: 'Ahora'
     };
 
     setRequests((prev) => [newRequest, ...prev]);
     setIsSyncedToDashboard(true);
-    showToast(`¡Solicitud ${newCode} enviada al equipo técnico de Pintuco con éxito!`);
+    showToast(`¡Solicitud ${newCode} enviada a ColorLink Pintuco! Puedes verla en "Mis Solicitudes".`);
   };
 
   const handleUpdateStatus = (
     id: string,
-    newStatus: ProjectStatus,
+    newStatus: RequestStatus,
     technicianNotes?: string,
     quotedAmount?: number
   ) => {
@@ -153,17 +180,19 @@ export default function App() {
         return req;
       })
     );
-    showToast(`Estado de la solicitud actualizado a "${newStatus.toUpperCase()}".`);
+    showToast(`Estado actualizado a "${newStatus.toUpperCase()}".`);
   };
 
   const handleResetWizard = () => {
     setCurrentInput({
       transformationTarget: 'hogar',
-      clientType: 'particular',
-      clientName: 'Laura María Restrepo',
-      clientEmail: 'laura.restrepo@pintuco-usuario.co',
-      clientPhone: '+57 312 847 2910',
-      clientCity: 'Bogotá D.C.',
+      clientType: currentUser?.clientType || 'particular',
+      clientName: currentUser?.name || 'Laura María Restrepo',
+      clientEmail: currentUser?.email || 'laura.restrepo@pintuco-usuario.co',
+      clientPhone: currentUser?.phone || '+57 312 847 2910',
+      clientCity: currentUser?.city || 'Bogotá D.C.',
+      companyName: currentUser?.companyName,
+      companyNit: currentUser?.companyNit,
       spaceType: 'hogar',
       specificSpaceSubtype: 'Sala / Comedor',
       specificArea: 'Zona social con muro de acento',
@@ -185,21 +214,29 @@ export default function App() {
     showToast('Nueva consulta de transformación iniciada.');
   };
 
-  const newRequestsCount = requests.filter((r) => r.status === 'recibida' || r.status === 'analizando').length;
+  const newRequestsCount = requests.filter((r) => r.status === 'nueva' || r.status === 'analizando').length;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col font-sans selection:bg-amber-100 selection:text-amber-900">
+    <div className={`min-h-screen flex flex-col font-sans selection:bg-amber-100 selection:text-amber-900 ${
+      activePortal === 'cliente' ? 'bg-slate-50 text-slate-800' : 'bg-slate-950 text-slate-100'
+    }`}>
       
-      {/* Top Global Header (Pintuco Brand Identity) */}
+      {/* Top Global Header with Portal Switcher */}
       <Header
-        currentView={currentView}
-        onViewChange={setCurrentView}
+        activePortal={activePortal}
+        onSelectPortal={setActivePortal}
+        clientView={clientView}
+        onClientViewChange={setClientView}
+        dashboardTab={dashboardTab}
+        onDashboardTabChange={setDashboardTab}
         onResetWizard={handleResetWizard}
         onLoadPreset={(sample) => {
           handleSelectSampleImage(sample);
-          setCurrentView('client');
+          setActivePortal('cliente');
+          setClientView('wizard');
         }}
-        onOpenProfile={() => setShowProfileModal(true)}
+        onOpenProfile={() => setShowAuthModal(true)}
+        currentUser={currentUser}
         samples={SAMPLE_IMAGES}
         totalRequestsCount={requests.length}
         newRequestsCount={newRequestsCount}
@@ -208,137 +245,98 @@ export default function App() {
       {/* Floating Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-16 sm:bottom-6 right-4 sm:right-6 z-50 animate-bounce max-w-sm">
-          <div className="flex items-center space-x-2.5 px-4 py-3 rounded-2xl bg-white border border-amber-300 text-amber-900 text-xs font-semibold shadow-xl shadow-amber-500/10">
+          <div className="flex items-center space-x-2.5 px-4 py-3 rounded-2xl bg-white border border-amber-300 text-amber-900 text-xs font-semibold shadow-xl shadow-amber-500/10 text-left">
             <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
             <span>{toastMessage}</span>
           </div>
         </div>
       )}
 
-      {/* Main Container - Responsive with bottom padding for mobile dock */}
+      {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 pb-24 sm:pb-12">
         
-        {/* Pintuco Sub-Banner: Inspiration & Context (Only show in non-welcome or as subtle contextual bar) */}
-        {currentView !== 'welcome' && (
-          <div className="mb-6 flex flex-col md:flex-row items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs gap-3">
-            <div className="flex items-center space-x-3 text-xs w-full md:w-auto">
-              <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shrink-0" />
-              <span className="text-slate-600 text-xs truncate">
-                {currentView === 'client' && (
-                  <>
-                    <strong className="text-amber-800 font-semibold">Asistente IA Pintuco:</strong>{' '}
-                    <span>Diagnóstico de espacio, cálculo de rendimiento y recomendación técnica.</span>
-                  </>
-                )}
-                {currentView === 'requests' && (
-                  <>
-                    <strong className="text-blue-700 font-semibold">Mis Solicitudes:</strong>{' '}
-                    <span>Rastreo de expedientes y cotizaciones técnicas en tiempo real.</span>
-                  </>
-                )}
-                {currentView === 'dashboard' && (
-                  <>
-                    <strong className="text-slate-800 font-semibold">Consola Comercial & Técnica:</strong>{' '}
-                    <span>Peritaje de recubrimientos y validación de laboratorio Pintuco.</span>
-                  </>
-                )}
-              </span>
-            </div>
+        {/* PORTAL 1: CLIENT EXPERIENCE */}
+        {activePortal === 'cliente' ? (
+          <>
+            {clientView === 'welcome' && (
+              <WelcomeScreen
+                onStartProject={() => {
+                  handleResetWizard();
+                  setClientView('wizard');
+                }}
+                onViewMyRequests={() => setClientView('requests')}
+                onSelectInspirationPreset={(sample) => {
+                  handleSelectSampleImage(sample);
+                  setClientView('wizard');
+                }}
+                samples={SAMPLE_IMAGES}
+              />
+            )}
 
-            <div className="hidden sm:flex items-center space-x-2 shrink-0">
-              {currentView !== 'requests' && (
-                <button
-                  onClick={() => setCurrentView('requests')}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-blue-800 border border-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Clock className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Mis Solicitudes ({requests.length})</span>
-                </button>
-              )}
+            {clientView === 'wizard' && (
+              <ClientWizard
+                input={currentInput}
+                aiAnalysis={aiAnalysis}
+                recommendation={recommendation}
+                onInputChange={handleInputChange}
+                onSelectSampleImage={handleSelectSampleImage}
+                onSendToDashboard={handleSendToDashboard}
+                onScheduleVisit={() => setShowScheduleModal(true)}
+                onRestart={() => setClientView('welcome')}
+                onAnswerSmartQuestion={handleAnswerSmartQuestion}
+                isSyncedToDashboard={isSyncedToDashboard}
+              />
+            )}
 
-              {currentView !== 'client' && (
-                <button
-                  onClick={() => setCurrentView('client')}
-                  className="text-xs font-bold px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 shadow-xs transition-all flex items-center gap-1.5 cursor-pointer"
-                >
-                  <Wand2 className="w-3.5 h-3.5" />
-                  <span>Transformar Espacio</span>
-                </button>
-              )}
-
-              {currentView !== 'dashboard' && (
-                <button
-                  onClick={() => setCurrentView('dashboard')}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition-all flex items-center gap-1.5 cursor-pointer"
-                >
-                  <LayoutDashboard className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Gestión Interna</span>
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Dynamic Views */}
-        {currentView === 'welcome' ? (
-          <WelcomeScreen
-            onStartProject={() => {
-              handleResetWizard();
-              setCurrentView('client');
-            }}
-            onViewMyRequests={() => setCurrentView('requests')}
-            onSelectInspirationPreset={(sample) => {
-              handleSelectSampleImage(sample);
-              setCurrentView('client');
-            }}
-            samples={SAMPLE_IMAGES}
-          />
-        ) : currentView === 'client' ? (
-          <ClientWizard
-            input={currentInput}
-            aiAnalysis={aiAnalysis}
-            recommendation={recommendation}
-            onInputChange={handleInputChange}
-            onSelectSampleImage={handleSelectSampleImage}
-            onSendToDashboard={handleSendToDashboard}
-            onScheduleVisit={() => setShowScheduleModal(true)}
-            onRestart={() => setCurrentView('welcome')}
-            onAnswerSmartQuestion={handleAnswerSmartQuestion}
-            isSyncedToDashboard={isSyncedToDashboard}
-          />
-        ) : currentView === 'requests' ? (
-          <MyRequestsTracker
-            requests={requests}
-            onSelectRequest={(req) => {
-              setCurrentView('dashboard');
-            }}
-            onNewRequest={() => {
-              handleResetWizard();
-              setCurrentView('client');
-            }}
-          />
+            {clientView === 'requests' && (
+              <MyRequestsTracker
+                requests={requests}
+                onSelectRequest={(req) => {
+                  // If client clicks to view details, switch to enterprise view or show full spec
+                  setActivePortal('empresa');
+                }}
+                onNewRequest={() => {
+                  handleResetWizard();
+                  setClientView('wizard');
+                }}
+              />
+            )}
+          </>
         ) : (
+          /* PORTAL 2: COMPANY / INTERNAL OPERATIONS EXPERIENCE */
           <InternalDashboard
             requests={requests}
             onUpdateStatus={handleUpdateStatus}
             onCreateNewClientFlow={() => {
               handleResetWizard();
-              setCurrentView('client');
+              setActivePortal('cliente');
+              setClientView('wizard');
             }}
+            activeTab={dashboardTab}
+            onTabChange={setDashboardTab}
           />
         )}
 
       </main>
 
-      {/* User Profile Modal (Registro & Contacto) */}
-      {showProfileModal && (
-        <UserProfileModal
-          input={currentInput}
-          onSave={(updates) => {
-            handleInputChange(updates);
-            showToast('Perfil actualizado correctamente.');
+      {/* Client Registration & Authentication Modal */}
+      {showAuthModal && (
+        <ClientAuthModal
+          currentUser={currentUser}
+          onLoginSuccess={(user) => {
+            setCurrentUser(user);
+            handleInputChange({
+              clientName: user.name,
+              clientEmail: user.email,
+              clientPhone: user.phone,
+              clientCity: user.city,
+              clientType: user.clientType,
+              companyName: user.companyName,
+              companyNit: user.companyNit
+            });
+            showToast(`¡Hola ${user.name}! Sesión iniciada en Mi Espacio.`);
           }}
-          onClose={() => setShowProfileModal(false)}
+          onClose={() => setShowAuthModal(false)}
         />
       )}
 
@@ -356,20 +354,28 @@ export default function App() {
 
       {/* Mobile Bottom Dock Bar */}
       <BottomNav
-        currentView={currentView}
-        onViewChange={setCurrentView}
-        onOpenProfile={() => setShowProfileModal(true)}
+        activePortal={activePortal}
+        onSelectPortal={setActivePortal}
+        clientView={clientView}
+        onClientViewChange={setClientView}
+        dashboardTab={dashboardTab}
+        onDashboardTabChange={setDashboardTab}
+        onOpenProfile={() => setShowAuthModal(true)}
         totalRequestsCount={requests.length}
         newRequestsCount={newRequestsCount}
       />
 
-      {/* Footer Pintuco Colombia */}
-      <footer className="border-t border-slate-200 py-6 bg-white text-center text-xs text-slate-500 font-mono hidden sm:block">
+      {/* Global Pintuco Colombia Footer */}
+      <footer className={`border-t py-6 text-center text-xs font-mono hidden sm:block transition-colors ${
+        activePortal === 'cliente'
+          ? 'bg-white border-slate-200 text-slate-500'
+          : 'bg-slate-900 border-slate-800 text-slate-400'
+      }`}>
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center space-x-2 text-slate-600">
-            <span className="font-bold text-amber-800">COLORLINK BY PINTUCO</span>
+          <div className="flex items-center space-x-2">
+            <span className="font-bold text-amber-500">COLORLINK BY PINTUCO</span>
             <span>•</span>
-            <span>El color de la calidad en Colombia</span>
+            <span>Transformación & Prescripción Técnica de Espacios • Colombia</span>
           </div>
           <div className="flex items-center space-x-3 text-slate-500">
             <span>Viniltex®</span>
@@ -378,7 +384,7 @@ export default function App() {
             <span>•</span>
             <span>Sellomax®</span>
             <span>•</span>
-            <span className="text-amber-800 font-semibold">Red Neuronal v4.2</span>
+            <span className="text-amber-500 font-semibold">IA Visión v4.2</span>
           </div>
         </div>
       </footer>

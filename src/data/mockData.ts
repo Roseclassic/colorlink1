@@ -309,6 +309,8 @@ export const SAMPLE_IMAGES: SampleImageOption[] = [
     clientType: 'particular',
     transformationTarget: 'hogar',
     surface: 'Pañete / Revoque interior con estuco tradicional',
+    surfaceType: 'concreto',
+    conditionEnum: 'humedad',
     problem: 'Humedad freática, eflorescencia salina y pintura englobada',
     url: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
     afterUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80',
@@ -317,7 +319,7 @@ export const SAMPLE_IMAGES: SampleImageOption[] = [
     ],
     defaultDescription: 'Muro del salón con manchas oscuras en el zócalo, pintura soplada que se cae en polvo y olor a humedad en época de lluvias.',
     areaM2: 28,
-    locationCity: 'Bogotá / Sabana',
+    locationCity: 'Bogotá D.C.',
     recommendedColor: {
       name: 'Lino Andino & Acento Barichara',
       hex: '#F4EFEA',
@@ -331,6 +333,8 @@ export const SAMPLE_IMAGES: SampleImageOption[] = [
     clientType: 'particular',
     transformationTarget: 'hogar',
     surface: 'Revoque rústico exterior expuesto al clima tropical',
+    surfaceType: 'concreto',
+    conditionEnum: 'reparacion',
     problem: 'Desgaste por rayos UV, chorreado negro de lluvia y microfisuras',
     url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
     afterUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
@@ -339,7 +343,7 @@ export const SAMPLE_IMAGES: SampleImageOption[] = [
     ],
     defaultDescription: 'Fachada de dos pisos con desgaste de color por el sol de la tarde y marcas oscuras de agua en los aleros tras fuertes lluvias.',
     areaM2: 52,
-    locationCity: 'Medellín / Antioquia',
+    locationCity: 'Medellín',
     recommendedColor: {
       name: 'Blanco Koraza Hidrófugo',
       hex: '#FAFAFA',
@@ -353,6 +357,8 @@ export const SAMPLE_IMAGES: SampleImageOption[] = [
     clientType: 'empresa',
     transformationTarget: 'empresa',
     surface: 'Drywall liso con marcas de roce e iluminación mixta',
+    surfaceType: 'drywall',
+    conditionEnum: 'desgaste',
     problem: 'Color amarillento desgastado y falta de identidad moderna',
     url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
     afterUrl: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80',
@@ -361,7 +367,7 @@ export const SAMPLE_IMAGES: SampleImageOption[] = [
     ],
     defaultDescription: 'Queremos transformar la oficina central con pintura ultra-lavable, rápida ocupación y colores que fomenten la creatividad.',
     areaM2: 75,
-    locationCity: 'Cali / Valle',
+    locationCity: 'Cali',
     recommendedColor: {
       name: 'Gris Monserrate Mate & Verde Salvia',
       hex: '#A3B19B',
@@ -370,46 +376,46 @@ export const SAMPLE_IMAGES: SampleImageOption[] = [
   },
   {
     id: 'sample-4',
-    title: 'Piso de bodega / Taller industrial con grasa y abrasión',
-    category: 'industria',
+    title: 'Local comercial y restaurante / Zona social',
+    category: 'comercio',
     clientType: 'empresa',
     transformationTarget: 'empresa',
-    surface: 'Concreto pulido poroso con tránsito de montacargas',
-    problem: 'Aceites penetrados, desprendimiento de polvo y fisuras',
-    url: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
-    afterUrl: 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=80',
-    additionalUrls: [
-      'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80'
-    ],
-    defaultDescription: 'Piso de almacenamiento que necesita recubrimiento epóxico sin juntas, antideslizante y de alta resistencia química.',
-    areaM2: 150,
-    locationCity: 'Barranquilla / Atlántico',
+    surface: 'Paredes mixtas concreto y madera con alta afluencia',
+    surfaceType: 'madera',
+    conditionEnum: 'desgaste',
+    problem: 'Manchas de grasa, huellas de roce continuo y desgaste de brillo',
+    url: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+    afterUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80',
+    additionalUrls: [],
+    defaultDescription: 'Espacio de cafetería y restaurante donde requerimos recubrimientos de máxima lavabilidad, cero olor residual y alta estética.',
+    areaM2: 60,
+    locationCity: 'Barranquilla',
     recommendedColor: {
-      name: 'Gris Epóxico Industrial RAL 7035',
-      hex: '#CBD5E1',
-      code: 'EPX-70'
+      name: 'Blanco Puro Biocuidado & Acento Mostaza',
+      hex: '#E5A93C',
+      code: 'COL-210'
     }
   },
   {
     id: 'sample-5',
-    title: 'Edificio en obra gris / Sellado de revoque masivo',
-    category: 'constructivo',
-    clientType: 'constructor',
+    title: 'Planta industrial / Estructura metálica & taller',
+    category: 'industria',
+    clientType: 'empresa',
     transformationTarget: 'constructivo',
-    surface: 'Mampostería y revoque nuevo alcalino con alta porosidad',
-    problem: 'Necesidad de sellado antialcalino, rendimiento por galón y garantía',
-    url: 'https://images.unsplash.com/photo-1541888946425-d0fbb18015f6?auto=format&fit=crop&w=800&q=80',
-    afterUrl: 'https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=1200&q=80',
-    additionalUrls: [
-      'https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80'
-    ],
-    defaultDescription: 'Proyecto residencial de 40 apartamentos en etapa de acabados. Requerimos dosificación de imprimación Sellomax y Viniltex Pro.',
-    areaM2: 380,
-    locationCity: 'Bucaramanga / Santander',
+    surface: 'Vigas de acero y pañetes con corrosión superficial',
+    surfaceType: 'metal',
+    conditionEnum: 'reparacion',
+    problem: 'Oxidación localizada, vapores químicos y desprendimiento previo',
+    url: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=800&q=80',
+    afterUrl: 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=80',
+    additionalUrls: [],
+    defaultDescription: 'Nave industrial que requiere protección anticorrosiva epóxica y esmalte de alta durabilidad para maquinaria y muros perimetrales.',
+    areaM2: 180,
+    locationCity: 'Bucaramanga',
     recommendedColor: {
-      name: 'Blanco Hueso Constructora',
-      hex: '#F8F7F2',
-      code: 'PRO-01'
+      name: 'Gris Técnico Epóxico Pintucoat',
+      hex: '#475569',
+      code: 'EPX-900'
     }
   }
 ];
@@ -536,7 +542,7 @@ export const INITIAL_REQUESTS: ProjectRequest[] = [
   {
     id: 'CLK-8501',
     code: 'CLK-8501',
-    createdAt: 'Hace 5 minutos',
+    createdAt: '2026-08-15T10:00:00.000Z',
     clientType: 'particular',
     client: {
       name: 'María Fernanda Gómez',
@@ -554,14 +560,37 @@ export const INITIAL_REQUESTS: ProjectRequest[] = [
       spaceType: 'hogar',
       specificSpaceSubtype: 'Sala / Comedor',
       specificArea: 'Muro principal y zócalo de sala',
+      surfaceType: 'concreto',
+      currentConditionEnum: 'humedad',
       currentCondition: 'humedad',
       estimatedM2: 28,
+      spacesCount: 1,
+      estimatedBudget: 320000,
+      requiredProjectDate: '2026-08-22',
+      createdAt: '2026-08-15T10:00:00.000Z',
+      hasMoisture: true,
+      hasCracks: false,
+      acceptsTerms: true,
+      requiresTechnicalVisit: true,
       trafficLevel: 'medio',
       urgency: 'alta',
       description: 'Pared de la sala con humedad en la parte baja, pintura descascarada y manchas de salitre.',
+      observations: 'Se requiere visita técnica preferiblemente en la mañana.',
       imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
       afterImageUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80',
       imageFileName: 'sala_humedad_zocalo.jpg',
+      evidences: [
+        {
+          id: 'ev-8501-1',
+          archivo: 'sala_humedad_zocalo.jpg',
+          tipo: 'image/jpeg',
+          fechaCarga: '2026-08-15T09:58:00.000Z',
+          descripcion: 'Humedad por capilaridad en muro inferior con desprendimiento de película.',
+          categoria: 'muro_principal',
+          url: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+          tamanioBytes: 1948200
+        }
+      ],
       selectedColorHex: '#F4EFEA',
       selectedColorName: 'Lino Andino & Acento Barichara',
       selectedColorCode: 'COL-104',
@@ -647,14 +676,14 @@ export const INITIAL_REQUESTS: ProjectRequest[] = [
         }
       ]
     },
-    status: 'recibida',
+    status: 'nueva',
     assignedTechnician: 'Ing. Carlos Mendoza (IA Pintuco)',
     technicianNotes: 'Solicitud con diagnóstico IA completo. Se recomienda verificar ventilación en visita técnica.'
   },
   {
     id: 'CLK-8502',
     code: 'CLK-8502',
-    createdAt: 'Hace 45 minutos',
+    createdAt: '2026-08-15T09:20:00.000Z',
     clientType: 'empresa',
     client: {
       name: 'Andrés Echeverry',
@@ -678,14 +707,37 @@ export const INITIAL_REQUESTS: ProjectRequest[] = [
       spaceType: 'comercio',
       specificSpaceSubtype: 'Local comercial / Retail & Restaurante',
       specificArea: 'Fachada principal y acceso comercial',
+      surfaceType: 'concreto',
+      currentConditionEnum: 'desgaste',
       currentCondition: 'desconchado',
       estimatedM2: 55,
+      spacesCount: 2,
+      estimatedBudget: 850000,
+      requiredProjectDate: '2026-08-28',
+      createdAt: '2026-08-15T09:20:00.000Z',
+      hasMoisture: false,
+      hasCracks: true,
+      acceptsTerms: true,
+      requiresTechnicalVisit: true,
       trafficLevel: 'alto',
       urgency: 'alta',
       description: 'Fachada del local en El Poblado con marcas de polución, desgaste solar y microfisuras por dilatación térmica.',
+      observations: 'Acceso comercial libre únicamente de noche o fines de semana.',
       imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
       afterImageUrl: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
       imageFileName: 'fachada_local_medellin.jpg',
+      evidences: [
+        {
+          id: 'ev-8502-1',
+          archivo: 'fachada_local_medellin.jpg',
+          tipo: 'image/jpeg',
+          fechaCarga: '2026-08-15T09:18:00.000Z',
+          descripcion: 'Fachada comercial con polución y microfisuras por intemperie.',
+          categoria: 'panoramica',
+          url: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
+          tamanioBytes: 3120400
+        }
+      ],
       selectedColorHex: '#FAFAFA',
       selectedColorName: 'Blanco Koraza Hidrófugo',
       selectedColorCode: 'KOR-01',
@@ -753,8 +805,440 @@ export const INITIAL_REQUESTS: ProjectRequest[] = [
         }
       ]
     },
-    status: 'revision_tecnica',
+    status: 'validacion_tecnica',
     assignedTechnician: 'Arq. Valentina Ríos (Pintuco Pro)',
-    technicianNotes: 'Metraje verificado. Cotización corporativa enviada al cliente.'
+    technicianNotes: 'Metraje verificado. Cotización corporativa lista para aprobación del cliente.',
+    quotedAmount: 440000
+  },
+  {
+    id: 'CLK-8503',
+    code: 'CLK-8503',
+    createdAt: '2026-08-14T16:45:00.000Z',
+    clientType: 'empresa',
+    client: {
+      name: 'Dr. Roberto Mendoza',
+      email: 'direccion@clinica-odontologica-valle.com',
+      phone: '+57 315 776 2211',
+      city: 'Cali',
+      companyName: 'Clínica Dental & Estética Valle',
+      companyNit: '901.332.110-4',
+      contactPerson: 'Dr. Roberto Mendoza'
+    },
+    input: {
+      transformationTarget: 'empresa',
+      clientType: 'empresa',
+      companyName: 'Clínica Dental & Estética Valle',
+      companyNit: '901.332.110-4',
+      companyContactPerson: 'Dr. Roberto Mendoza',
+      clientName: 'Dr. Roberto Mendoza',
+      clientEmail: 'direccion@clinica-odontologica-valle.com',
+      clientPhone: '+57 315 776 2211',
+      clientCity: 'Cali',
+      spaceType: 'oficina',
+      specificSpaceSubtype: 'Consultorios & Salas de Espera',
+      specificArea: 'Zona de recepción y consultorio clínico',
+      surfaceType: 'drywall',
+      currentConditionEnum: 'desgaste',
+      currentCondition: 'manchas',
+      estimatedM2: 75,
+      spacesCount: 3,
+      estimatedBudget: 1200000,
+      requiredProjectDate: '2026-08-30',
+      createdAt: '2026-08-14T16:45:00.000Z',
+      hasMoisture: false,
+      hasCracks: false,
+      acceptsTerms: true,
+      requiresTechnicalVisit: false,
+      trafficLevel: 'alto',
+      urgency: 'alta',
+      description: 'Espacios de atención médica que requieren máxima higiene, pintura antibacterial lavable y cero olor para no interrumpir consultas.',
+      observations: 'Aplicación en horario nocturno para reapertura al día siguiente.',
+      imageUrl: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+      afterImageUrl: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1200&q=80',
+      imageFileName: 'consultorio_cali.jpg',
+      evidences: [
+        {
+          id: 'ev-8503-1',
+          archivo: 'consultorio_cali.jpg',
+          tipo: 'image/jpeg',
+          fechaCarga: '2026-08-14T16:40:00.000Z',
+          descripcion: 'Muros interiores en drywall con alto tránsito y necesidad de recubrimiento antibacteriano.',
+          categoria: 'muro_principal',
+          url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80',
+          tamanioBytes: 2450000
+        }
+      ],
+      selectedColorHex: '#A3B19B',
+      selectedColorName: 'Verde Salvia & Gris Monserrate',
+      selectedColorCode: 'BIO-208',
+      selectedFinish: 'satinado',
+      selectedStyle: 'Equilibrio Botánico (Salvia & Gris)'
+    },
+    aiAnalysis: {
+      detectedSurface: 'Placa de yeso-cartón (drywall) con pintura vinílica previa',
+      primaryProblem: 'Necesidad de grado aséptico, resistencia a desinfectantes y olor nulo',
+      secondaryObservations: [
+        'Sustrato nivelado sin deformaciones mecánicas.',
+        'Zona de alto contacto manual y limpieza hospitalaria continua.'
+      ],
+      environmentalFactors: ['Clima cálido Cali', 'Aire acondicionado continuo 22°C'],
+      ambientContext: 'Institución de salud privada',
+      complexityLevel: 'Media',
+      overallConfidence: 99.4,
+      environmentalSuitability: 'Recomendado Sistema Viniltex Biocuidado Grado Clínico',
+      moistureIndex: 12,
+      adhesionScore: 88,
+      detectionAreas: [],
+      processingTimeMs: 310,
+      conversationalSummary: 'Espacio médico que requiere Viniltex Biocuidado con iones de plata antimicrobianos y cero emisión de compuestos orgánicos volátiles.'
+    },
+    recommendation: {
+      recommendedSystem: 'Sistema Viniltex Biocuidado Cero Olor con Iones de Plata',
+      pintucoFamilyName: 'Viniltex Biocuidado Antimicrobiano Certificado',
+      systemSummary: 'Recubrimiento 99.9% antibacterial resistente al lavado con hipoclorito y desinfectantes clínicos.',
+      solutionType: 'Protección Hospitalaria & Calidad de Aire Interior',
+      primerProduct: COATING_PRODUCTS.sellomax_antihumedad,
+      mainCoatingProduct: COATING_PRODUCTS.viniltex_biocuidado,
+      preparationSteps: [
+        '1. Limpieza con alcohol isopropílico para retirar grasas.',
+        '2. Masillado puntual de imperfecciones con Estuco Drywall Pintuco.',
+        '3. Aplicación de 2 manos de Viniltex Biocuidado.'
+      ],
+      calculatedLiters: 19.5,
+      calculatedGallons: 5.2,
+      calculatedBuckets: 1,
+      calculatedPrimerLiters: 4.0,
+      estimatedLaborDays: 1.5,
+      complexityLevel: 'Fácil (DIY)',
+      estimatedCostRange: {
+        min: 490000,
+        max: 610000,
+        currency: 'COP ($)'
+      },
+      technicalAdvice: 'Pintura certificada con secado al tacto en 45 minutos. Cero olor residual.',
+      warrantyPeriod: '10 años de protección antibacterial Pintuco',
+      suggestedFinish: 'Satinado Clínico',
+      suggestedStyle: 'Equilibrio Botánico (Salvia & Gris)',
+      selectedColorHex: '#A3B19B',
+      selectedColorName: 'Verde Salvia & Gris Monserrate',
+      selectedColorCode: 'BIO-208',
+      nextSteps: [
+        {
+          title: 'Aprobación Comercial',
+          description: 'Orden confirmada y lista para despacho logístico.',
+          actionLabel: 'Despachar Pedido'
+        }
+      ]
+    },
+    status: 'gestion_comercial',
+    assignedTechnician: 'Ing. Mateo Gómez (Especialista Biocuidado)',
+    technicianNotes: 'Cliente aprobó cotización por $540.000 COP. Despacho programado para mañana en Cali.',
+    quotedAmount: 540000
+  },
+  {
+    id: 'CLK-8504',
+    code: 'CLK-8504',
+    createdAt: '2026-08-13T11:15:00.000Z',
+    clientType: 'particular',
+    client: {
+      name: 'Felipe Salamanca',
+      email: 'felipe.salamanca@outlook.com',
+      phone: '+57 320 994 3322',
+      city: 'Barranquilla'
+    },
+    input: {
+      transformationTarget: 'hogar',
+      clientType: 'particular',
+      clientName: 'Felipe Salamanca',
+      clientEmail: 'felipe.salamanca@outlook.com',
+      clientPhone: '+57 320 994 3322',
+      clientCity: 'Barranquilla',
+      spaceType: 'hogar',
+      specificSpaceSubtype: 'Terraza & Zona BBQ',
+      specificArea: 'Muro perimetral terraza exterior',
+      surfaceType: 'concreto',
+      currentConditionEnum: 'humedad',
+      currentCondition: 'moho',
+      estimatedM2: 36,
+      spacesCount: 1,
+      estimatedBudget: 420000,
+      requiredProjectDate: '2026-08-25',
+      createdAt: '2026-08-13T11:15:00.000Z',
+      hasMoisture: true,
+      hasCracks: false,
+      acceptsTerms: true,
+      requiresTechnicalVisit: false,
+      trafficLevel: 'medio',
+      urgency: 'normal',
+      description: 'Muro de terraza con manchas oscuras de moho por humedad costera y brisa marina.',
+      observations: 'Requiere pintura antihongos de alta resistencia a salinidad.',
+      imageUrl: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+      afterImageUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80',
+      imageFileName: 'terraza_barranquilla.jpg',
+      evidences: [],
+      selectedColorHex: '#F4EFEA',
+      selectedColorName: 'Arena Caribe & Blanco Puro',
+      selectedColorCode: 'KOR-112',
+      selectedFinish: 'mate',
+      selectedStyle: 'Cálido Sereno'
+    },
+    aiAnalysis: {
+      detectedSurface: 'Mampostería exterior con salitre marino y hongo filamentoso',
+      primaryProblem: 'Condensación salina y crecimiento biológico por alta humedad relativa',
+      secondaryObservations: ['Afectación superficial sin compromiso estructural.'],
+      environmentalFactors: ['Ambiente costero Barranquilla', 'HR > 80%'],
+      ambientContext: 'Terraza descubierta',
+      complexityLevel: 'Media',
+      overallConfidence: 97.8,
+      environmentalSuitability: 'Apto para Koraza Máxima Protección Antihongos',
+      moistureIndex: 58,
+      adhesionScore: 62,
+      detectionAreas: [],
+      processingTimeMs: 340,
+      conversationalSummary: 'Detectamos moho por humedad costera. Recomendamos lavado fungicida y aplicación de Koraza con triple barrera antihongos.'
+    },
+    recommendation: {
+      recommendedSystem: 'Sistema Koraza Antihongos Triple Acción',
+      pintucoFamilyName: 'Koraza Protección Marina Antihongos',
+      systemSummary: 'Impermeabilizante con aditivos fungicidas y antialgas de larga duración.',
+      solutionType: 'Protección Costera & Anti-Moho',
+      primerProduct: COATING_PRODUCTS.sellomax_antihumedad,
+      mainCoatingProduct: COATING_PRODUCTS.koraza_maxima,
+      preparationSteps: [
+        '1. Lavado fungicida con Solución Lavamuros Pintuco.',
+        '2. Aplicación de Sellomax Antihumedad.',
+        '3. 2 manos de Koraza Protección Marina.'
+      ],
+      calculatedLiters: 9.0,
+      calculatedGallons: 2.4,
+      calculatedBuckets: 0,
+      calculatedPrimerLiters: 3.5,
+      estimatedLaborDays: 2,
+      complexityLevel: 'Moderado',
+      estimatedCostRange: {
+        min: 240000,
+        max: 310000,
+        currency: 'COP ($)'
+      },
+      technicalAdvice: 'Lavar con agua dulce antes de pintar para retirar sales depositadas.',
+      warrantyPeriod: '7 años de protección certificada',
+      suggestedFinish: 'Mate Antirreflejo',
+      suggestedStyle: 'Arena Caribe',
+      selectedColorHex: '#F4EFEA',
+      selectedColorName: 'Arena Caribe',
+      selectedColorCode: 'KOR-112',
+      nextSteps: []
+    },
+    status: 'recomendacion_generada',
+    assignedTechnician: 'Ing. Carlos Mendoza (IA Pintuco)',
+    technicianNotes: 'Recomendación generada por IA. Presupuesto listo para consulta del cliente.',
+    quotedAmount: 275000
+  },
+  {
+    id: 'CLK-8505',
+    code: 'CLK-8505',
+    createdAt: '2026-08-10T08:30:00.000Z',
+    clientType: 'particular',
+    client: {
+      name: 'Camila Morales',
+      email: 'camila.morales@gmail.com',
+      phone: '+57 311 200 4455',
+      city: 'Bucaramanga'
+    },
+    input: {
+      transformationTarget: 'hogar',
+      clientType: 'particular',
+      clientName: 'Camila Morales',
+      clientEmail: 'camila.morales@gmail.com',
+      clientPhone: '+57 311 200 4455',
+      clientCity: 'Bucaramanga',
+      spaceType: 'hogar',
+      specificSpaceSubtype: 'Habitación Infantil',
+      specificArea: 'Muros completos y cielo raso',
+      surfaceType: 'concreto',
+      currentConditionEnum: 'nuevo',
+      currentCondition: 'bueno',
+      estimatedM2: 24,
+      spacesCount: 1,
+      estimatedBudget: 280000,
+      requiredProjectDate: '2026-08-18',
+      createdAt: '2026-08-10T08:30:00.000Z',
+      hasMoisture: false,
+      hasCracks: false,
+      acceptsTerms: true,
+      requiresTechnicalVisit: false,
+      trafficLevel: 'medio',
+      urgency: 'normal',
+      description: 'Cambio de color para habitación de bebé con pintura ecológica sin olor y ultra lavable.',
+      observations: 'Entrega finalizada a satisfacción total.',
+      imageUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80',
+      afterImageUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80',
+      imageFileName: 'habitacion_bebe.jpg',
+      evidences: [],
+      selectedColorHex: '#E5A93C',
+      selectedColorName: 'Mostaza Cálido & Blanco Seda',
+      selectedColorCode: 'VIN-304',
+      selectedFinish: 'satinado',
+      selectedStyle: 'Cálido Luminoso'
+    },
+    aiAnalysis: {
+      detectedSurface: 'Estuco fino interior en óptimo estado',
+      primaryProblem: 'Renovación estética e hipoalergénica',
+      secondaryObservations: ['Superficie completamente curada y lista.'],
+      environmentalFactors: ['Clima templado Bucaramanga'],
+      ambientContext: 'Dormitorio infantil',
+      complexityLevel: 'Baja (DIY)',
+      overallConfidence: 99.8,
+      environmentalSuitability: 'Excelente para Viniltex Biocuidado',
+      moistureIndex: 8,
+      adhesionScore: 95,
+      detectionAreas: [],
+      processingTimeMs: 220,
+      conversationalSummary: 'Superficie en excelente estado lista para aplicación directa de Viniltex Biocuidado.'
+    },
+    recommendation: {
+      recommendedSystem: 'Sistema Viniltex Biocuidado Hipoalergénico',
+      pintucoFamilyName: 'Viniltex Biocuidado Cero Olor',
+      systemSummary: 'Pintura lavable con certificación de bienestar y pureza ambiental.',
+      solutionType: 'Renovación Infantil & Bienestar',
+      primerProduct: COATING_PRODUCTS.sellomax_antihumedad,
+      mainCoatingProduct: COATING_PRODUCTS.viniltex_biocuidado,
+      preparationSteps: ['1. Limpiar polvo.', '2. 2 manos de Viniltex Biocuidado.'],
+      calculatedLiters: 6.0,
+      calculatedGallons: 1.6,
+      calculatedBuckets: 0,
+      calculatedPrimerLiters: 0,
+      estimatedLaborDays: 1,
+      complexityLevel: 'Fácil (DIY)',
+      estimatedCostRange: { min: 140000, max: 180000, currency: 'COP ($)' },
+      technicalAdvice: 'Secado en 2 horas.',
+      warrantyPeriod: '10 años certificada',
+      suggestedFinish: 'Satinado',
+      suggestedStyle: 'Cálido Luminoso',
+      selectedColorHex: '#E5A93C',
+      selectedColorName: 'Mostaza Cálido',
+      selectedColorCode: 'VIN-304',
+      nextSteps: []
+    },
+    status: 'finalizada',
+    assignedTechnician: 'Ing. Carlos Mendoza (IA Pintuco)',
+    technicianNotes: 'Proyecto ejecutado y finalizado exitosamente. Cliente calificó con 5/5 estrellas.',
+    quotedAmount: 165000
   }
 ];
+
+export interface ProcessStageConfig {
+  key: string;
+  stepNumber: number;
+  label: string;
+  shortLabel: string;
+  clientLabel: string;
+  badgeBg: string;
+  textColor: string;
+  borderColor: string;
+  dotColor: string;
+  description: string;
+  companyAction: string;
+}
+
+export const PROCESS_STAGES: ProcessStageConfig[] = [
+  {
+    key: 'nueva',
+    stepNumber: 1,
+    label: 'Nueva solicitud',
+    shortLabel: 'Nueva',
+    clientLabel: 'Recibida por ColorLink',
+    badgeBg: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+    textColor: 'text-emerald-700',
+    borderColor: 'border-emerald-500',
+    dotColor: 'bg-emerald-500',
+    description: 'Solicitud entrante registrada en plataforma con fotos y especificaciones.',
+    companyAction: 'Revisar datos y admitir a pipeline'
+  },
+  {
+    key: 'info_pendiente',
+    stepNumber: 2,
+    label: 'Información pendiente',
+    shortLabel: 'Info Pendiente',
+    clientLabel: 'Documentación o foto adicional requerida',
+    badgeBg: 'bg-amber-50 text-amber-900 border-amber-300',
+    textColor: 'text-amber-700',
+    borderColor: 'border-amber-500',
+    dotColor: 'bg-amber-500',
+    description: 'Se requiere metraje preciso, fotos de iluminación o acceso al inmueble.',
+    companyAction: 'Solicitar aclaración o fotos al cliente'
+  },
+  {
+    key: 'analizando',
+    stepNumber: 3,
+    label: 'Analizando IA',
+    shortLabel: 'Analizando IA',
+    clientLabel: 'Análisis de Visión & Patología IA en proceso',
+    badgeBg: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+    textColor: 'text-indigo-700',
+    borderColor: 'border-indigo-500',
+    dotColor: 'bg-indigo-500',
+    description: 'Red neuronal evaluando rugosidad, humedad, salitre y compatibilidad de base.',
+    companyAction: 'Monitorear inferencia neural y métricas'
+  },
+  {
+    key: 'validacion_tecnica',
+    stepNumber: 4,
+    label: 'Validación técnica',
+    shortLabel: 'Peritaje Técnico',
+    clientLabel: 'Validación por Perito Especialista Pintuco',
+    badgeBg: 'bg-blue-50 text-blue-800 border-blue-200',
+    textColor: 'text-blue-700',
+    borderColor: 'border-blue-500',
+    dotColor: 'bg-blue-500',
+    description: 'Ingeniero técnico Pintuco verificando dosificación, imprimación y rendimiento.',
+    companyAction: 'Firmar dictamen y ajustar manos de pintura'
+  },
+  {
+    key: 'recomendacion_generada',
+    stepNumber: 5,
+    label: 'Recomendación generada',
+    shortLabel: 'Ficha Lista',
+    clientLabel: 'Ficha técnica y presupuesto oficial listo',
+    badgeBg: 'bg-violet-50 text-violet-800 border-violet-200',
+    textColor: 'text-violet-700',
+    borderColor: 'border-violet-500',
+    dotColor: 'bg-violet-500',
+    description: 'Fórmula de producto, galones calculados, código de color y ficha descargable.',
+    companyAction: 'Enviar propuesta formal al cliente'
+  },
+  {
+    key: 'gestion_comercial',
+    stepNumber: 6,
+    label: 'Gestión comercial/operativa',
+    shortLabel: 'Comercial/Operativa',
+    clientLabel: 'Coordinación de despacho y cuadrilla',
+    badgeBg: 'bg-cyan-50 text-cyan-800 border-cyan-200',
+    textColor: 'text-cyan-700',
+    borderColor: 'border-cyan-500',
+    dotColor: 'bg-cyan-500',
+    description: 'Coordinación logística de despacho Pintuco o asignación de contratista certificado.',
+    companyAction: 'Programar entrega y fecha de inicio'
+  },
+  {
+    key: 'finalizada',
+    stepNumber: 7,
+    label: 'Finalizada',
+    shortLabel: 'Finalizada',
+    clientLabel: 'Transformación completada con garantía',
+    badgeBg: 'bg-slate-100 text-slate-800 border-slate-300',
+    textColor: 'text-slate-700',
+    borderColor: 'border-slate-500',
+    dotColor: 'bg-slate-500',
+    description: 'Proyecto culminado, certificado de garantía emitido y cliente satisfecho.',
+    companyAction: 'Archivar expediente con auditoría'
+  }
+];
+
+export function normalizeRequestStatus(status: string): string {
+  if (status === 'recibida') return 'nueva';
+  if (status === 'revision_tecnica') return 'validacion_tecnica';
+  if (status === 'recomendacion_lista') return 'recomendacion_generada';
+  return status;
+}
+

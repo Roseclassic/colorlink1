@@ -67,7 +67,18 @@ export const StepMediaAndContext: React.FC<StepMediaAndContextProps> = ({
   const currentImages: ProjectImage[] = input.images && input.images.length > 0
     ? input.images
     : input.imageUrl
-    ? [{ id: 'img-main', url: input.imageUrl, fileName: input.imageFileName || 'foto_principal.jpg', caption: 'Vista principal', source: 'upload' }]
+    ? [{
+        id: 'img-main',
+        archivo: input.imageFileName || 'foto_principal.jpg',
+        tipo: 'image/jpeg',
+        fechaCarga: new Date().toISOString(),
+        descripcion: 'Vista principal del espacio',
+        categoria: 'muro_principal',
+        url: input.imageUrl,
+        fileName: input.imageFileName || 'foto_principal.jpg',
+        caption: 'Vista principal',
+        source: 'upload'
+      }]
     : [];
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +90,13 @@ export const StepMediaAndContext: React.FC<StepMediaAndContextProps> = ({
           const newUrl = uploadEvent.target.result as string;
           const newImg: ProjectImage = {
             id: `img-${Date.now()}`,
+            archivo: file.name,
+            tipo: file.type || 'image/jpeg',
+            fechaCarga: new Date().toISOString(),
+            descripcion: currentImages.length === 0 ? 'Vista general' : `Detalle #${currentImages.length + 1}`,
+            categoria: currentImages.length === 0 ? 'muro_principal' : 'detalle_dano',
             url: newUrl,
+            tamanioBytes: file.size,
             fileName: file.name,
             caption: currentImages.length === 0 ? 'Vista general' : `Detalle #${currentImages.length + 1}`,
             source: 'upload'
@@ -88,7 +105,8 @@ export const StepMediaAndContext: React.FC<StepMediaAndContextProps> = ({
           onChange({
             imageUrl: newUrl,
             imageFileName: file.name,
-            images: updatedList
+            images: updatedList,
+            evidences: updatedList
           });
           setActivePhotoIndex(0);
         }
@@ -106,14 +124,21 @@ export const StepMediaAndContext: React.FC<StepMediaAndContextProps> = ({
           const newUrl = uploadEvent.target.result as string;
           const newImg: ProjectImage = {
             id: `img-${Date.now()}`,
+            archivo: file.name,
+            tipo: file.type || 'image/jpeg',
+            fechaCarga: new Date().toISOString(),
+            descripcion: `Detalle ${currentImages.length + 1}`,
+            categoria: 'detalle_dano',
             url: newUrl,
+            tamanioBytes: file.size,
             fileName: file.name,
             caption: `Detalle ${currentImages.length + 1}`,
             source: 'upload'
           };
           const updatedList = [...currentImages, newImg];
           onChange({
-            images: updatedList
+            images: updatedList,
+            evidences: updatedList
           });
           setActivePhotoIndex(updatedList.length - 1);
         }
@@ -133,15 +158,23 @@ export const StepMediaAndContext: React.FC<StepMediaAndContextProps> = ({
           const newUrl = uploadEvent.target.result as string;
           const newImg: ProjectImage = {
             id: `img-${Date.now()}`,
+            archivo: file.name,
+            tipo: file.type || 'image/jpeg',
+            fechaCarga: new Date().toISOString(),
+            descripcion: 'Foto arrastrada',
+            categoria: 'muro_principal',
             url: newUrl,
+            tamanioBytes: file.size,
             fileName: file.name,
             caption: 'Foto arrastrada',
             source: 'upload'
           };
+          const updatedList = [newImg, ...currentImages];
           onChange({
             imageUrl: newUrl,
             imageFileName: file.name,
-            images: [newImg, ...currentImages]
+            images: updatedList,
+            evidences: updatedList
           });
           setActivePhotoIndex(0);
         }
@@ -156,15 +189,17 @@ export const StepMediaAndContext: React.FC<StepMediaAndContextProps> = ({
     if (updated.length > 0) {
       onChange({
         imageUrl: updated[0].url,
-        imageFileName: updated[0].fileName,
-        images: updated
+        imageFileName: updated[0].archivo || updated[0].fileName,
+        images: updated,
+        evidences: updated
       });
       setActivePhotoIndex(0);
     } else {
       onChange({
         imageUrl: '',
         imageFileName: '',
-        images: []
+        images: [],
+        evidences: []
       });
     }
   };
