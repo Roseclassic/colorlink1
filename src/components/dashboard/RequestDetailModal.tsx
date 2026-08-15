@@ -285,21 +285,21 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
           </div>
 
           <div className="flex items-center space-x-2 w-full sm:w-auto">
-            {request.status !== 'validada' && (
+            {request.status !== 'revision_tecnica' && (
               <button
-                onClick={() => handleSave('validada')}
-                className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-semibold text-xs transition-colors cursor-pointer"
+                onClick={() => handleSave('revision_tecnica')}
+                className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs transition-colors cursor-pointer"
               >
-                ✓ Validar Presupuesto
+                🔵 Pasar a Revisión Técnica
               </button>
             )}
 
-            {request.status !== 'finalizada' && (
+            {request.status !== 'recomendacion_lista' && (
               <button
-                onClick={() => handleSave('finalizada')}
-                className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition-colors cursor-pointer"
+                onClick={() => handleSave('recomendacion_lista')}
+                className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs transition-colors cursor-pointer"
               >
-                ★ Finalizar & Archivar
+                🟣 Emitir Recomendación Lista
               </button>
             )}
 

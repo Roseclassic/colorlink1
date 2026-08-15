@@ -1,10 +1,10 @@
 import React from 'react';
-import { Sparkles, LayoutDashboard, Wand2, ShieldCheck, Palette, Layers, RefreshCw } from 'lucide-react';
+import { Sparkles, LayoutDashboard, Wand2, ShieldCheck, Palette, Layers, RefreshCw, Clock } from 'lucide-react';
 import { SampleImageOption } from '../types';
 
 interface HeaderProps {
-  currentView: 'client' | 'dashboard';
-  onViewChange: (view: 'client' | 'dashboard') => void;
+  currentView: 'client' | 'requests' | 'dashboard';
+  onViewChange: (view: 'client' | 'requests' | 'dashboard') => void;
   onResetWizard: () => void;
   onLoadPreset: (sample: SampleImageOption) => void;
   samples: SampleImageOption[];
@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="relative group hidden lg:block">
               <button
                 id="btn-quick-presets"
-                className="flex items-center space-x-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-slate-900/90 text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white transition-colors"
+                className="flex items-center space-x-1.5 text-xs font-medium px-3 py-2 rounded-lg bg-slate-900/90 text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white transition-colors cursor-pointer"
                 title="Cargar casos reales para probar la IA"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
@@ -76,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({
                         onLoadPreset(s);
                         onViewChange('client');
                       }}
-                      className="w-full text-left px-2.5 py-2 rounded-lg text-xs hover:bg-slate-800 text-slate-300 hover:text-cyan-300 transition-colors flex items-center justify-between group/item"
+                      className="w-full text-left px-2.5 py-2 rounded-lg text-xs hover:bg-slate-800 text-slate-300 hover:text-cyan-300 transition-colors flex items-center justify-between group/item cursor-pointer"
                     >
                       <span className="truncate pr-2 font-medium">{s.title}</span>
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 group-hover/item:bg-cyan-500/20 group-hover/item:text-cyan-300 shrink-0">
@@ -88,32 +88,50 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Navigation Tabs between Client & Internal Dashboard */}
+            {/* Navigation Tabs between Client Assistant, Mis Solicitudes, & Internal Dashboard */}
             <div className="flex p-1 bg-slate-900/90 rounded-xl border border-slate-800/90 shadow-inner">
               <button
                 id="nav-tab-client"
                 onClick={() => onViewChange('client')}
-                className={`flex items-center space-x-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
+                className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
                   currentView === 'client'
                     ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/20'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
                 <Wand2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span>Asistente Cliente</span>
+                <span className="hidden xs:inline">Asistente</span>
+                <span className="xs:hidden">IA</span>
+              </button>
+
+              <button
+                id="nav-tab-requests"
+                onClick={() => onViewChange('requests')}
+                className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
+                  currentView === 'requests'
+                    ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/20'
+                    : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+                }`}
+              >
+                <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span>Mis Solicitudes</span>
+                <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-slate-800 text-purple-300">
+                  {totalRequestsCount}
+                </span>
               </button>
 
               <button
                 id="nav-tab-dashboard"
                 onClick={() => onViewChange('dashboard')}
-                className={`relative flex items-center space-x-2 px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 ${
+                className={`relative flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 cursor-pointer ${
                   currentView === 'dashboard'
                     ? 'bg-slate-800 text-white shadow-md border border-slate-700'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                 }`}
               >
                 <LayoutDashboard className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span>Gestión Interna</span>
+                <span className="hidden sm:inline">Gestión Interna</span>
+                <span className="sm:hidden">CRM</span>
                 {newRequestsCount > 0 && (
                   <span className="flex items-center justify-center px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-cyan-500 text-slate-950">
                     {newRequestsCount}
@@ -127,7 +145,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 id="btn-restart-assistant"
                 onClick={onResetWizard}
-                className="hidden sm:flex items-center space-x-1.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-white bg-slate-900/70 hover:bg-slate-800 border border-slate-800 rounded-lg transition-colors"
+                className="hidden sm:flex items-center space-x-1.5 px-3 py-2 text-xs font-medium text-slate-400 hover:text-white bg-slate-900/70 hover:bg-slate-800 border border-slate-800 rounded-lg transition-colors cursor-pointer"
                 title="Comenzar nueva consulta desde cero"
               >
                 <RefreshCw className="w-3.5 h-3.5" />

@@ -58,49 +58,49 @@ export const InternalDashboard: React.FC<InternalDashboardProps> = ({
     description: string;
   }[] = [
     {
-      status: 'nueva',
-      title: 'Solicitudes Nuevas',
-      icon: <Inbox className="w-4 h-4 text-amber-400" />,
+      status: 'recibida',
+      title: '1. Recibida',
+      icon: <Inbox className="w-4 h-4 text-emerald-400" />,
+      badgeBg: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
+      accentColor: 'border-t-emerald-500',
+      description: 'Solicitud entrante registrada con éxito'
+    },
+    {
+      status: 'analizando',
+      title: '2. Analizando',
+      icon: <Cpu className="w-4 h-4 text-amber-400" />,
       badgeBg: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
       accentColor: 'border-t-amber-500',
-      description: 'Leads entrantes pendientes de primera revisión'
+      description: 'Motor neural procesando patología e imágenes'
     },
     {
-      status: 'en_analisis',
-      title: 'En Análisis IA',
-      icon: <Cpu className="w-4 h-4 text-cyan-400" />,
-      badgeBg: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30',
-      accentColor: 'border-t-cyan-500',
-      description: 'Modelos de visión escaneando patologías'
-    },
-    {
-      status: 'validada',
-      title: 'Validadas',
+      status: 'revision_tecnica',
+      title: '3. Revisión Técnica',
       icon: <ShieldCheck className="w-4 h-4 text-blue-400" />,
       badgeBg: 'bg-blue-500/10 text-blue-300 border-blue-500/30',
       accentColor: 'border-t-blue-500',
-      description: 'Prescripción técnica verificada por perito'
+      description: 'Perito especialista validando cálculo y sustrato'
     },
     {
-      status: 'finalizada',
-      title: 'Finalizadas',
-      icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,
-      badgeBg: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
-      accentColor: 'border-t-emerald-500',
-      description: 'Presupuestadas y ejecutadas con éxito'
+      status: 'recomendacion_lista',
+      title: '4. Recomendación Lista',
+      icon: <CheckCircle2 className="w-4 h-4 text-purple-400" />,
+      badgeBg: 'bg-purple-500/10 text-purple-300 border-purple-500/30',
+      accentColor: 'border-t-purple-500',
+      description: 'Fórmula, rendimiento y presupuesto finalizados'
     }
   ];
 
   const getStatusBadge = (status: RequestStatus) => {
     switch (status) {
-      case 'nueva':
-        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20">Nueva</span>;
-      case 'en_analisis':
-        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">En Análisis IA</span>;
-      case 'validada':
-        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/20">Validada</span>;
-      case 'finalizada':
-        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">Finalizada</span>;
+      case 'recibida':
+        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">🟢 Recibida</span>;
+      case 'analizando':
+        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 text-amber-300 border border-amber-500/20">🟡 Analizando</span>;
+      case 'revision_tecnica':
+        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/20">🔵 Revisión técnica</span>;
+      case 'recomendacion_lista':
+        return <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">🟣 Recomendación lista</span>;
     }
   };
 

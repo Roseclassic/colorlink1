@@ -11,7 +11,9 @@ import {
   ShieldCheck,
   Zap,
   Eye,
-  Crosshair
+  Crosshair,
+  HelpCircle,
+  MessageSquare
 } from 'lucide-react';
 import { AiTechnicalAnalysis, ClientProjectInput, TechnicalRecommendation } from '../../types';
 
@@ -20,18 +22,23 @@ interface StepLiveAiScannerProps {
   aiAnalysis: AiTechnicalAnalysis;
   recommendation: TechnicalRecommendation;
   onCompleteAnalysis: () => void;
+  onAnswerSmartQuestion?: (questionId: string, answer: string) => void;
 }
 
 export const StepLiveAiScanner: React.FC<StepLiveAiScannerProps> = ({
   input,
   aiAnalysis,
   recommendation,
-  onCompleteAnalysis
+  onCompleteAnalysis,
+  onAnswerSmartQuestion
 }) => {
   const [progress, setProgress] = useState(15);
   const [currentStageIndex, setCurrentStageIndex] = useState(0);
   const [activeBoxIndex, setActiveBoxIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+  const [selectedSmartAnswer, setSelectedSmartAnswer] = useState<string>(
+    aiAnalysis.smartQuestion?.selectedAnswer || ''
+  );
 
   const stages = [
     { title: 'Segmentación de imagen por redes neuronales', sub: 'Extracción de mapas de relieve, textura y reflectancia...' },
@@ -44,19 +51,19 @@ export const StepLiveAiScanner: React.FC<StepLiveAiScannerProps> = ({
     const timer1 = setTimeout(() => {
       setProgress(40);
       setCurrentStageIndex(1);
-    }, 700);
+    }, 600);
 
     const timer2 = setTimeout(() => {
       setProgress(75);
       setCurrentStageIndex(2);
       setActiveBoxIndex(1);
-    }, 1500);
+    }, 1300);
 
     const timer3 = setTimeout(() => {
       setProgress(100);
       setCurrentStageIndex(3);
       setIsFinished(true);
-    }, 2400);
+    }, 2100);
 
     return () => {
       clearTimeout(timer1);
@@ -64,6 +71,13 @@ export const StepLiveAiScanner: React.FC<StepLiveAiScannerProps> = ({
       clearTimeout(timer3);
     };
   }, []);
+
+  const handleSelectSmartAnswer = (opt: string) => {
+    setSelectedSmartAnswer(opt);
+    if (aiAnalysis.smartQuestion && onAnswerSmartQuestion) {
+      onAnswerSmartQuestion(aiAnalysis.smartQuestion.id, opt);
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-7 animate-fadeIn">
@@ -171,6 +185,42 @@ export const StepLiveAiScanner: React.FC<StepLiveAiScannerProps> = ({
             </div>
 
           </div>
+
+          {/* Conditional Smart AI Question (Pregunta Inteligente Condicional) */}
+          {aiAnalysis.smartQuestion && (
+            <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-cyan-950/40 via-blue-950/30 to-slate-900 border border-cyan-500/40 shadow-xl space-y-3">
+              <div className="flex items-center space-x-2 text-cyan-300 text-xs font-bold uppercase tracking-wider">
+                <MessageSquare className="w-4 h-4 text-cyan-400 animate-pulse" />
+                <span>Pregunta Inteligente de la IA (Para calibración exacta)</span>
+              </div>
+
+              <p className="text-sm font-semibold text-white">
+                {aiAnalysis.smartQuestion.question}
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+                {aiAnalysis.smartQuestion.options.map((option) => {
+                  const isSelected = selectedSmartAnswer === option;
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => handleSelectSmartAnswer(option)}
+                      className={`px-3 py-2 rounded-xl text-xs font-medium text-left border transition-all cursor-pointer flex items-center justify-between ${
+                        isSelected
+                          ? 'bg-cyan-500 text-slate-950 font-bold border-cyan-400 shadow-md shadow-cyan-500/20'
+                          : 'bg-slate-800/80 text-slate-200 border-slate-700 hover:bg-slate-700 hover:text-white'
+                      }`}
+                    >
+                      <span>{option}</span>
+                      {isSelected && <CheckCircle2 className="w-3.5 h-3.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
         </div>
 
         {/* Right: Technical AI Metrics & Diagnostics Breakdown (5 Cols) */}

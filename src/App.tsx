@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Header } from './components/Header';
 import { ClientWizard } from './components/client/ClientWizard';
+import { MyRequestsTracker } from './components/client/MyRequestsTracker';
 import { InternalDashboard } from './components/dashboard/InternalDashboard';
 import { ScheduleVisitModal } from './components/ScheduleVisitModal';
 import { INITIAL_REQUESTS, SAMPLE_IMAGES, SPACE_OPTIONS } from './data/mockData';
@@ -11,10 +12,10 @@ import {
   SampleImageOption
 } from './types';
 import { runAiSurfaceDiagnostics } from './utils/aiDiagnostics';
-import { CheckCircle2, Sparkles, Wand2, LayoutDashboard, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Sparkles, Wand2, LayoutDashboard, ArrowRight, Clock, Building2, Home } from 'lucide-react';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'client' | 'dashboard'>('client');
+  const [currentView, setCurrentView] = useState<'client' | 'requests' | 'dashboard'>('client');
   const [requests, setRequests] = useState<ProjectRequest[]>(INITIAL_REQUESTS);
   const [showScheduleModal, setShowScheduleModal] = useState<boolean>(false);
   const [isSyncedToDashboard, setIsSyncedToDashboard] = useState<boolean>(false);
@@ -23,6 +24,11 @@ export default function App() {
   // Default input state
   const defaultInitialSample = SAMPLE_IMAGES[0];
   const [currentInput, setCurrentInput] = useState<ClientProjectInput>({
+    clientType: 'particular',
+    clientName: 'María Fernanda Gómez',
+    clientEmail: 'maria.gomez@gmail.com',
+    clientPhone: '+34 654 321 987',
+    clientCity: 'Madrid',
     spaceType: 'hogar',
     specificArea: 'Salón / Comedor',
     currentCondition: 'humedad',
@@ -31,12 +37,9 @@ export default function App() {
     urgency: 'alta',
     description: defaultInitialSample.defaultDescription,
     imageUrl: defaultInitialSample.url,
+    imageUrls: [defaultInitialSample.url],
     imageFileName: 'muro_salon_filtracion.jpg',
-    preferredFinish: 'mate',
-    clientName: 'Daniela Alarcón',
-    clientEmail: 'daniela.alarcon@gmail.com',
-    clientPhone: '+34 654 321 987',
-    clientCity: 'Madrid'
+    preferredFinish: 'mate'
   });
 
   // Calculate live AI diagnostic & coating recommendation
@@ -68,6 +71,7 @@ export default function App() {
     setCurrentInput((prev) => ({
       ...prev,
       imageUrl: sample.url,
+      imageUrls: [sample.url],
       imageFileName: `${sample.category}_${sample.id}.jpg`,
       spaceType: sample.category,
       estimatedM2: sample.areaM2,
@@ -77,31 +81,40 @@ export default function App() {
     setIsSyncedToDashboard(false);
   };
 
+  const handleAnswerSmartQuestion = (questionId: string, answer: string) => {
+    showToast(`Calibración IA aplicada: "${answer}"`);
+  };
+
   const handleSendToDashboard = () => {
     const randomCodeNum = Math.floor(1000 + Math.random() * 9000);
     const newCode = `CLK-${randomCodeNum}`;
 
     const newRequest: ProjectRequest = {
-      id: `req-${Date.now()}`,
+      id: newCode,
       code: newCode,
       createdAt: 'Hace un momento',
+      clientType: currentInput.clientType || 'particular',
       client: {
-        name: currentInput.clientName || 'Cliente Digital',
+        name: currentInput.clientType === 'empresa' ? (currentInput.companyContactPerson || currentInput.companyName || 'Responsable Empresa') : (currentInput.clientName || 'Cliente Particular'),
         email: currentInput.clientEmail || 'cliente@colorlink.ai',
         phone: currentInput.clientPhone || '+34 600 000 000',
-        city: currentInput.clientCity || 'Madrid'
+        city: currentInput.clientCity || 'Madrid',
+        companyName: currentInput.companyName,
+        companyNit: currentInput.companyNit,
+        contactPerson: currentInput.companyContactPerson
       },
       input: { ...currentInput },
       aiAnalysis: { ...aiAnalysis },
       recommendation: { ...recommendation },
-      status: 'nueva',
-      technicianNotes: `Solicitud originada desde el Asistente IA. Sistema recomendado: ${recommendation.recommendedSystem}.`,
+      status: 'recibida',
+      assignedTechnician: 'Ing. Carlos Mendoza (IA Especialista)',
+      technicianNotes: `Solicitud originada en asistente digital. Tipo: ${currentInput.clientType === 'empresa' ? 'Empresa / B2B' : 'Particular / Residencial'}. Sistema prescrito: ${recommendation.recommendedSystem}.`,
       lastUpdated: 'Ahora'
     };
 
     setRequests((prev) => [newRequest, ...prev]);
     setIsSyncedToDashboard(true);
-    showToast(`¡Solicitud ${newCode} enviada al CRM interno de ColorLink!`);
+    showToast(`¡Solicitud ${newCode} registrada con éxito! Puedes rastrearla en "Mis Solicitudes".`);
   };
 
   const handleUpdateStatus = (
@@ -129,6 +142,11 @@ export default function App() {
 
   const handleResetWizard = () => {
     setCurrentInput({
+      clientType: 'particular',
+      clientName: '',
+      clientEmail: '',
+      clientPhone: '',
+      clientCity: 'Madrid',
       spaceType: 'hogar',
       specificArea: 'Salón / Comedor',
       currentCondition: 'bueno',
@@ -137,18 +155,15 @@ export default function App() {
       urgency: 'normal',
       description: '',
       imageUrl: SAMPLE_IMAGES[0].url,
+      imageUrls: [SAMPLE_IMAGES[0].url],
       imageFileName: 'foto_muestra_1.jpg',
-      preferredFinish: 'satinado',
-      clientName: '',
-      clientEmail: '',
-      clientPhone: '',
-      clientCity: 'Madrid'
+      preferredFinish: 'satinado'
     });
     setIsSyncedToDashboard(false);
     showToast('Nueva consulta iniciada.');
   };
 
-  const newRequestsCount = requests.filter((r) => r.status === 'nueva').length;
+  const newRequestsCount = requests.filter((r) => r.status === 'recibida' || r.status === 'analizando').length;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
@@ -177,32 +192,54 @@ export default function App() {
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         
-        {/* View Switcher Banner for live demo clarity */}
+        {/* View Quick Breadcrumb & Helper Bar */}
         <div className="mb-6 flex flex-col sm:flex-row items-center justify-between p-3.5 sm:p-4 rounded-2xl bg-slate-900/40 border border-slate-800/80 gap-3">
           <div className="flex items-center space-x-3 text-xs">
-            <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            <div className={`w-2 h-2 rounded-full ${
+              currentView === 'client' ? 'bg-cyan-400' : currentView === 'requests' ? 'bg-purple-400' : 'bg-emerald-400'
+            } animate-pulse`} />
             <span className="text-slate-400">
-              Vista activa: <strong className="text-white">{currentView === 'client' ? 'Experiencia Conversacional Cliente (Asistente IA)' : 'Panel de Gestión Operativa (Dashboard Interno)'}</strong>
+              Módulo activo:{' '}
+              <strong className="text-white">
+                {currentView === 'client'
+                  ? 'Captura Inteligente & Diagnóstico IA (Experiencia Cliente)'
+                  : currentView === 'requests'
+                  ? 'Rastreador de Expedientes en Tiempo Real (Mis Solicitudes)'
+                  : 'Consola de Gestión Técnica & Peritaje (Equipo Interno)'}
+              </strong>
             </span>
           </div>
 
           <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setCurrentView(currentView === 'client' ? 'dashboard' : 'client')}
-              className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer"
-            >
-              {currentView === 'client' ? (
-                <>
-                  <LayoutDashboard className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Ver Gestión Interna ({requests.length} solicitudes)</span>
-                </>
-              ) : (
-                <>
-                  <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Volver al Asistente Cliente</span>
-                </>
-              )}
-            </button>
+            {currentView !== 'requests' && (
+              <button
+                onClick={() => setCurrentView('requests')}
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-purple-300 border border-purple-500/30 transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <Clock className="w-3.5 h-3.5 text-purple-400" />
+                <span>Rastrear Mis Solicitudes ({requests.length})</span>
+              </button>
+            )}
+
+            {currentView !== 'client' && (
+              <button
+                onClick={() => setCurrentView('client')}
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <Wand2 className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Nuevo Diagnóstico IA</span>
+              </button>
+            )}
+
+            {currentView !== 'dashboard' && (
+              <button
+                onClick={() => setCurrentView('dashboard')}
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors flex items-center gap-1.5 cursor-pointer"
+              >
+                <LayoutDashboard className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Gestión Interna</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -217,7 +254,19 @@ export default function App() {
             onSendToDashboard={handleSendToDashboard}
             onScheduleVisit={() => setShowScheduleModal(true)}
             onRestart={handleResetWizard}
+            onAnswerSmartQuestion={handleAnswerSmartQuestion}
             isSyncedToDashboard={isSyncedToDashboard}
+          />
+        ) : currentView === 'requests' ? (
+          <MyRequestsTracker
+            requests={requests}
+            onSelectRequest={(req) => {
+              setCurrentView('dashboard');
+            }}
+            onNewRequest={() => {
+              handleResetWizard();
+              setCurrentView('client');
+            }}
           />
         ) : (
           <InternalDashboard
@@ -239,7 +288,7 @@ export default function App() {
           onClose={() => setShowScheduleModal(false)}
           onConfirm={(date, time) => {
             handleSendToDashboard();
-            showToast(`Visita agendada para el ${date} a las ${time}.`);
+            showToast(`Visita técnica agendada para el ${date} a las ${time}.`);
           }}
         />
       )}
@@ -261,3 +310,4 @@ export default function App() {
     </div>
   );
 }
+

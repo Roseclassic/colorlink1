@@ -1,6 +1,6 @@
 {
   "name": "ColorLink - Asistente Inteligente de Pintura e IA",
-  "description": "Plataforma inteligente que transforma solicitudes de pintura y recubrimientos con captura conversacional, diagnóstico de visión IA y gestión integral.",
+  "description": "Asistente inteligente de recubrimientos y color inspirado en el ecosistema Pintuco Colombia: entiende tu espacio antes de pintar con diagnóstico de visión IA, simulación antes/después interactiva y prescripción técnica.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
