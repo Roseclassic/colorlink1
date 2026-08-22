@@ -16,21 +16,31 @@ import {
   Award,
   ChevronRight,
   Layers,
-  Sparkle
+  Sparkle,
+  LogIn,
+  UserPlus,
+  User,
+  Package
 } from 'lucide-react';
-import { SampleImageOption } from '../../types';
+import { ClientUser, SampleImageOption } from '../../types';
 
 interface WelcomeScreenProps {
+  currentUser: ClientUser | null;
   onStartProject: () => void;
   onViewMyRequests: () => void;
   onSelectInspirationPreset: (sample: SampleImageOption) => void;
+  onOpenAuth: (mode?: 'login' | 'register') => void;
+  onOpenProfile: () => void;
   samples: SampleImageOption[];
 }
 
 export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
+  currentUser,
   onStartProject,
   onViewMyRequests,
   onSelectInspirationPreset,
+  onOpenAuth,
+  onOpenProfile,
   samples
 }) => {
   const [sliderPosition, setSliderPosition] = useState<number>(50);
@@ -99,8 +109,82 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             Cuéntanos qué espacio quieres renovar y te ayudaremos a encontrar la mejor solución de recubrimiento, protección y color.
           </p>
 
+          {/* Access Flow Banner: Iniciar sesión | Crear cuenta OR Logged In Card */}
+          <div className="py-2">
+            {!currentUser ? (
+              <div className="p-3 sm:p-4 rounded-3xl bg-white border border-amber-200/90 shadow-lg shadow-amber-500/10 max-w-lg mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="flex items-center space-x-3 text-left">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold shrink-0 shadow-xs">
+                    <User className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-amber-900 uppercase font-mono tracking-wider">
+                      Portal Cliente ColorLink
+                    </span>
+                    <p className="text-xs font-semibold text-slate-800">
+                      Guarda tus proyectos y recibe peritajes IA
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-2 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    id="btn-welcome-login"
+                    onClick={() => onOpenAuth('login')}
+                    className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold text-xs transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
+                  >
+                    <LogIn className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Iniciar sesión</span>
+                  </button>
+
+                  <span className="text-slate-300 hidden sm:inline">|</span>
+
+                  <button
+                    type="button"
+                    id="btn-welcome-register"
+                    onClick={() => onOpenAuth('register')}
+                    className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-xs transition-colors flex items-center justify-center space-x-1.5 cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Crear cuenta</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="p-3.5 sm:p-4 rounded-3xl bg-amber-50/80 border border-amber-300 shadow-sm max-w-lg mx-auto flex items-center justify-between gap-3 text-left">
+                <div className="flex items-center space-x-3 truncate">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold text-base shrink-0 shadow-xs">
+                    {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <div className="truncate">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-bold text-slate-900 truncate">
+                        ¡Hola, {currentUser.name.split(' ')[0]}!
+                      </span>
+                      <span className="px-2 py-0.2 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                        Sesión activa
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-600 truncate">
+                      {currentUser.clientType === 'empresa' ? currentUser.companyName || 'Empresa B2B' : 'Cliente Particular'} • {currentUser.city}
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={onOpenProfile}
+                  className="px-3 py-2 rounded-xl bg-white border border-amber-300 text-amber-900 hover:bg-amber-100 text-xs font-bold transition-colors cursor-pointer shrink-0"
+                >
+                  Mi Perfil & Menú
+                </button>
+              </div>
+            )}
+          </div>
+
           {/* Two Primary Action Buttons */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 max-w-md mx-auto">
+          <div className="pt-1 flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 max-w-md mx-auto">
             <button
               id="btn-welcome-start-project"
               onClick={onStartProject}

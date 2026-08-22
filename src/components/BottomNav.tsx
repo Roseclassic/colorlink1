@@ -3,14 +3,14 @@ import {
   Home,
   Wand2,
   Clock,
-  LayoutDashboard,
   User,
   Building2,
   Layers,
   ShieldCheck,
-  ArrowRightLeft
+  LogIn
 } from 'lucide-react';
 import { PortalType, ClientSubView, DashboardSubView } from './Header';
+import { ClientUser } from '../types';
 
 interface BottomNavProps {
   activePortal: PortalType;
@@ -20,6 +20,8 @@ interface BottomNavProps {
   dashboardTab: DashboardSubView;
   onDashboardTabChange: (tab: DashboardSubView) => void;
   onOpenProfile: () => void;
+  currentUser?: ClientUser | null;
+  onOpenAuth?: (mode?: 'login' | 'register') => void;
   totalRequestsCount: number;
   newRequestsCount: number;
 }
@@ -31,9 +33,9 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   onClientViewChange,
   dashboardTab,
   onDashboardTabChange,
-  onOpenProfile,
-  totalRequestsCount,
-  newRequestsCount
+  currentUser,
+  onOpenAuth,
+  totalRequestsCount
 }) => {
   return (
     <nav
@@ -49,6 +51,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         <>
           {/* 1. Inicio */}
           <button
+            id="mobile-nav-home"
             onClick={() => onClientViewChange('welcome')}
             className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer ${
               clientView === 'welcome' ? 'text-amber-800 font-bold' : 'text-slate-500 hover:text-slate-900'
@@ -62,6 +65,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
 
           {/* 2. Asistente */}
           <button
+            id="mobile-nav-wizard"
             onClick={() => onClientViewChange('wizard')}
             className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer ${
               clientView === 'wizard' ? 'text-amber-800 font-bold' : 'text-slate-500 hover:text-slate-900'
@@ -73,26 +77,41 @@ export const BottomNav: React.FC<BottomNavProps> = ({
             <span className="text-[10px] mt-0.5 font-medium">Asistente</span>
           </button>
 
-          {/* 3. Solicitudes */}
-          <button
-            onClick={() => onClientViewChange('requests')}
-            className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer ${
-              clientView === 'requests' ? 'text-blue-700 font-bold' : 'text-slate-500 hover:text-slate-900'
-            }`}
-          >
-            <div className={`p-1.5 rounded-xl relative ${clientView === 'requests' ? 'bg-blue-100 text-blue-800' : 'text-slate-400'}`}>
-              <Clock className="w-5 h-5" />
-              {totalRequestsCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-blue-600 text-white font-bold text-[9px] rounded-full flex items-center justify-center shadow-xs">
-                  {totalRequestsCount}
-                </span>
-              )}
-            </div>
-            <span className="text-[10px] mt-0.5 font-medium">Mis Solicitudes</span>
-          </button>
+          {/* 3. Solicitudes / Ingresar */}
+          {currentUser ? (
+            <button
+              id="mobile-nav-requests"
+              onClick={() => onClientViewChange('requests')}
+              className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer ${
+                clientView === 'requests' ? 'text-blue-700 font-bold' : 'text-slate-500 hover:text-slate-900'
+              }`}
+            >
+              <div className={`p-1.5 rounded-xl relative ${clientView === 'requests' ? 'bg-blue-100 text-blue-800' : 'text-slate-400'}`}>
+                <Clock className="w-5 h-5" />
+                {totalRequestsCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-blue-600 text-white font-bold text-[9px] rounded-full flex items-center justify-center shadow-xs">
+                    {totalRequestsCount}
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] mt-0.5 font-medium">Solicitudes</span>
+            </button>
+          ) : (
+            <button
+              id="mobile-nav-login"
+              onClick={() => onOpenAuth && onOpenAuth('login')}
+              className="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-slate-500 hover:text-slate-900 cursor-pointer"
+            >
+              <div className="p-1.5 rounded-xl bg-slate-100 text-amber-600">
+                <LogIn className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] mt-0.5 font-medium">Ingresar</span>
+            </button>
+          )}
 
           {/* 4. Switch to Empresa */}
           <button
+            id="mobile-nav-empresa"
             onClick={() => onSelectPortal('empresa')}
             className="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-slate-500 hover:text-slate-900 cursor-pointer"
           >
@@ -106,6 +125,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         <>
           {/* Empresa Tab 1: Pipeline */}
           <button
+            id="mobile-nav-pipeline"
             onClick={() => onDashboardTabChange('pipeline')}
             className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer ${
               dashboardTab === 'pipeline' ? 'text-blue-400 font-bold' : 'text-slate-400 hover:text-white'
@@ -119,6 +139,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
 
           {/* Empresa Tab 2: Clientes */}
           <button
+            id="mobile-nav-clients"
             onClick={() => onDashboardTabChange('clients')}
             className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer ${
               dashboardTab === 'clients' ? 'text-blue-400 font-bold' : 'text-slate-400 hover:text-white'
@@ -132,6 +153,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
 
           {/* Empresa Tab 3: Métricas */}
           <button
+            id="mobile-nav-metrics"
             onClick={() => onDashboardTabChange('metrics')}
             className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all cursor-pointer ${
               dashboardTab === 'metrics' ? 'text-blue-400 font-bold' : 'text-slate-400 hover:text-white'
@@ -145,6 +167,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
 
           {/* Switch to Cliente */}
           <button
+            id="mobile-nav-cliente"
             onClick={() => onSelectPortal('cliente')}
             className="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-slate-400 hover:text-white cursor-pointer"
           >

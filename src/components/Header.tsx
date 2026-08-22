@@ -15,7 +15,12 @@ import {
   Layers,
   ArrowRightLeft,
   CheckCircle2,
-  Users
+  Users,
+  LogIn,
+  LogOut,
+  Package,
+  MapPin,
+  FileText
 } from 'lucide-react';
 import { ClientUser, SampleImageOption } from '../types';
 
@@ -33,6 +38,9 @@ interface HeaderProps {
   onResetWizard: () => void;
   onLoadPreset: (sample: SampleImageOption) => void;
   onOpenProfile: () => void;
+  onOpenAuth: (mode?: 'login' | 'register') => void;
+  onLogout: () => void;
+  onOpenProfileTab?: (tab: 'profile' | 'projects' | 'orders' | 'addresses') => void;
   currentUser: ClientUser | null;
   samples: SampleImageOption[];
   totalRequestsCount: number;
@@ -49,6 +57,9 @@ export const Header: React.FC<HeaderProps> = ({
   onResetWizard,
   onLoadPreset,
   onOpenProfile,
+  onOpenAuth,
+  onLogout,
+  onOpenProfileTab,
   currentUser,
   samples,
   totalRequestsCount,
@@ -56,6 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [showPresetsMenu, setShowPresetsMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   return (
     <header
@@ -258,37 +270,168 @@ export const Header: React.FC<HeaderProps> = ({
                   }`}
                 >
                   <Wand2 className="w-3.5 h-3.5" />
-                  <span>Crear Solicitud</span>
+                  <span>{currentUser ? 'Crear Solicitud' : 'Probar Asistente'}</span>
                 </button>
 
-                <button
-                  id="client-nav-requests"
-                  onClick={() => onClientViewChange('requests')}
-                  className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                    clientView === 'requests'
-                      ? 'bg-white text-blue-700 font-bold shadow-xs border border-slate-200'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                >
-                  <Clock className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Mis Solicitudes</span>
-                  <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/80 text-slate-700">
-                    {totalRequestsCount}
-                  </span>
-                </button>
+                {currentUser && (
+                  <button
+                    id="client-nav-requests"
+                    onClick={() => onClientViewChange('requests')}
+                    className={`flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                      clientView === 'requests'
+                        ? 'bg-white text-blue-700 font-bold shadow-xs border border-slate-200'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <Clock className="w-3.5 h-3.5 text-blue-600" />
+                    <span>Mis Solicitudes</span>
+                    <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/80 text-slate-700">
+                      {totalRequestsCount}
+                    </span>
+                  </button>
+                )}
               </div>
 
-              {/* User Profile / Login */}
-              <button
-                id="btn-user-profile"
-                onClick={onOpenProfile}
-                className="flex items-center space-x-2 px-3 py-2 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-all cursor-pointer"
-              >
-                <div className="w-6 h-6 rounded-full bg-amber-200 text-amber-900 font-bold flex items-center justify-center text-[10px]">
-                  {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
+              {/* User Profile Dropdown OR Iniciar Sesión / Crear Cuenta */}
+              {!currentUser ? (
+                <div className="flex items-center space-x-1.5 sm:space-x-2">
+                  <button
+                    id="btn-header-login"
+                    onClick={() => onOpenAuth('login')}
+                    className="flex items-center space-x-1.5 px-3 py-2 text-xs font-bold text-slate-700 hover:text-slate-950 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all cursor-pointer"
+                  >
+                    <LogIn className="w-3.5 h-3.5 text-amber-600" />
+                    <span className="hidden xs:inline">Iniciar sesión</span>
+                    <span className="xs:hidden">Ingresar</span>
+                  </button>
+
+                  <button
+                    id="btn-header-register"
+                    onClick={() => onOpenAuth('register')}
+                    className="flex items-center space-x-1.5 px-3.5 py-2 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 rounded-xl shadow-xs transition-all cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Crear cuenta</span>
+                  </button>
                 </div>
-                <span className="hidden lg:inline">{currentUser?.name ? currentUser.name.split(' ')[0] : 'Mi Perfil'}</span>
-              </button>
+              ) : (
+                <div className="relative">
+                  <button
+                    id="btn-user-profile-menu"
+                    onClick={() => setShowUserDropdown(!showUserDropdown)}
+                    className="flex items-center space-x-2 px-2.5 sm:px-3 py-1.5 text-xs font-semibold text-slate-800 hover:text-slate-950 bg-slate-50 hover:bg-amber-50/50 border border-slate-200 hover:border-amber-300 rounded-2xl transition-all cursor-pointer shadow-xs"
+                  >
+                    <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-amber-400 to-yellow-400 text-slate-950 font-bold flex items-center justify-center text-xs shadow-xs">
+                      {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                    <div className="text-left hidden lg:block max-w-[120px] truncate">
+                      <span className="font-bold text-xs block truncate text-slate-900 leading-tight">
+                        {currentUser.name.split(' ')[0]}
+                      </span>
+                      <span className="text-[10px] text-slate-500 block truncate">
+                        {currentUser.clientType === 'empresa' ? 'Empresa B2B' : 'Particular'}
+                      </span>
+                    </div>
+                    <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${showUserDropdown ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {showUserDropdown && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setShowUserDropdown(false)}
+                      />
+                      <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 p-2 space-y-1 animate-fadeIn text-left">
+                        {/* User summary header */}
+                        <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 space-y-0.5">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-xs text-slate-900 truncate block">
+                              {currentUser.name}
+                            </span>
+                            <span className="px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-amber-100 text-amber-900 capitalize">
+                              {currentUser.clientType}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 truncate">{currentUser.email}</p>
+                          <p className="text-[10px] text-slate-400 truncate">{currentUser.city}</p>
+                        </div>
+
+                        {/* Dropdown Action Items */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowUserDropdown(false);
+                            if (onOpenProfileTab) onOpenProfileTab('profile');
+                            else onOpenProfile();
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-slate-900 flex items-center space-x-2.5 transition-colors cursor-pointer"
+                        >
+                          <User className="w-4 h-4 text-amber-600" />
+                          <span>Mi perfil</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowUserDropdown(false);
+                            onClientViewChange('requests');
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-slate-900 flex items-center justify-between transition-colors cursor-pointer"
+                        >
+                          <div className="flex items-center space-x-2.5">
+                            <Clock className="w-4 h-4 text-blue-600" />
+                            <span>Mis proyectos</span>
+                          </div>
+                          <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700">
+                            {totalRequestsCount}
+                          </span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowUserDropdown(false);
+                            if (onOpenProfileTab) onOpenProfileTab('orders');
+                            else onOpenProfile();
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-slate-900 flex items-center space-x-2.5 transition-colors cursor-pointer"
+                        >
+                          <Package className="w-4 h-4 text-emerald-600" />
+                          <span>Mis pedidos</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowUserDropdown(false);
+                            if (onOpenProfileTab) onOpenProfileTab('addresses');
+                            else onOpenProfile();
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-slate-900 flex items-center space-x-2.5 transition-colors cursor-pointer"
+                        >
+                          <MapPin className="w-4 h-4 text-amber-600" />
+                          <span>Direcciones</span>
+                        </button>
+
+                        <div className="h-px bg-slate-100 my-1" />
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowUserDropdown(false);
+                            onLogout();
+                          }}
+                          className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 flex items-center space-x-2.5 transition-colors cursor-pointer"
+                        >
+                          <LogOut className="w-4 h-4 text-red-600" />
+                          <span>Cerrar sesión</span>
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
 
               {/* Mobile Drawer Trigger */}
               <button
@@ -375,7 +518,7 @@ export const Header: React.FC<HeaderProps> = ({
             activePortal === 'cliente' ? 'bg-white border-slate-100' : 'bg-slate-900 border-slate-800 text-white'
           }`}>
             {activePortal === 'cliente' ? (
-              <div className="grid grid-cols-3 gap-2">
+              <div className={`grid ${currentUser ? 'grid-cols-3' : 'grid-cols-2'} gap-2`}>
                 <button
                   onClick={() => {
                     onClientViewChange('welcome');
@@ -406,20 +549,22 @@ export const Header: React.FC<HeaderProps> = ({
                   <span>Asistente</span>
                 </button>
 
-                <button
-                  onClick={() => {
-                    onClientViewChange('requests');
-                    setShowMobileMenu(false);
-                  }}
-                  className={`p-2.5 rounded-xl text-xs font-bold flex flex-col items-center gap-1 ${
-                    clientView === 'requests'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-50 text-slate-700 border border-slate-200'
-                  }`}
-                >
-                  <Clock className="w-4 h-4" />
-                  <span>Solicitudes ({totalRequestsCount})</span>
-                </button>
+                {currentUser && (
+                  <button
+                    onClick={() => {
+                      onClientViewChange('requests');
+                      setShowMobileMenu(false);
+                    }}
+                    className={`p-2.5 rounded-xl text-xs font-bold flex flex-col items-center gap-1 ${
+                      clientView === 'requests'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-slate-50 text-slate-700 border border-slate-200'
+                    }`}
+                  >
+                    <Clock className="w-4 h-4" />
+                    <span>Solicitudes ({totalRequestsCount})</span>
+                  </button>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-3 gap-2">

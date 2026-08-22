@@ -45,6 +45,21 @@ export type RequestStatus =
 export type ProjectStatus = RequestStatus;
 
 // Perfil de Usuario / Cliente
+export type DocumentType = 'CC' | 'CE' | 'Pasaporte' | 'NIT';
+
+export interface SavedAddress {
+  id: string;
+  label: string; // Ej: 'Residencia Principal', 'Oficina', 'Local Comercial'
+  city: string;
+  locality?: string; // Localidad o Zona (ej: 'Chapinero', 'El Poblado', etc.)
+  neighborhood?: string; // Barrio
+  address: string; // Calle, carrera, número
+  complement?: string; // Apto, torre, interior, oficina
+  notes?: string; // Indicaciones para entrega (portería, citófono)
+  details?: string; // Alias de compatibilidad
+  isDefault?: boolean;
+}
+
 export interface ClientUser {
   id: string;
   name: string;
@@ -52,11 +67,17 @@ export interface ClientUser {
   phone: string;
   city: string;
   clientType: ClientType;
+  documentType?: DocumentType;
+  documentNumber?: string;
+  responsibleName?: string; // Para empresas
   companyName?: string;
   companyNit?: string;
   avatarUrl?: string;
   registeredDate: string;
   activeProjectsCount: number;
+  savedAddresses?: SavedAddress[];
+  acceptTerms?: boolean;
+  acceptDataPolicy?: boolean;
 }
 
 // OBJETO DE EVIDENCIA FOTOGRÁFICA
@@ -122,6 +143,11 @@ export interface SmartAiQuestion {
 
 // MODELO DE ENTRADA CLIENTE (CAMPOS TIPADOS CON STRING, NUMBER, DATE, BOOLEAN, ENUM)
 export interface ClientProjectInput {
+  // RELATIONS
+  clientId?: string;
+  cliente_id?: string;
+  projectId?: string;
+
   // ENUMS
   transformationTarget: TransformationTarget;
   clientType: ClientType; // 'particular' | 'empresa'
@@ -319,9 +345,116 @@ export interface ApiProjectSubmissionPayload {
   };
 }
 
+export interface CartItem {
+  id: string;
+  productId: string;
+  name: string;
+  category: string;
+  brand: string;
+  pintucoLine: string;
+  imageUrl: string;
+  presentation: string;
+  unitPriceCOP: number;
+  quantity: number;
+  coverageM2: string;
+  finish?: string;
+  colorName?: string;
+  colorHex?: string;
+  colorCode?: string;
+  isAiRecommended: boolean;
+  benefitKey?: string;
+}
+
+export type DeliveryOptionType = 'domicilio' | 'recoger_tienda' | 'asesoria_previa';
+
+export type PaymentMethodType =
+  | 'pse'
+  | 'tarjeta'
+  | 'billetera'
+  | 'transferencia'
+  | 'punto_autorizado';
+
+export interface PintacasaStore {
+  tienda_id: string;
+  nombre: string;
+  direccion: string;
+  ciudad: string;
+  localidad: string;
+  barrio?: string;
+  latitud: number;
+  longitud: number;
+  horario: string;
+  telefono: string;
+  distancia_km: number;
+  disponibilidad: '100% Disponible' | 'Inmediata' | 'Parcial (4/5)' | 'Bajo Pedido';
+  stockTotalItems: number;
+  availableItemsCount: number;
+  tiempo_estimado_recogida: string;
+  isRecommended?: boolean;
+  recommendationReason?: string;
+  features: string[];
+}
+
+export interface DeliveryDetails {
+  tipo_entrega: 'domicilio' | 'recoger_tienda';
+  direccion: string;
+  ciudad: string;
+  localidad: string;
+  barrio: string;
+  complemento?: string;
+  latitud: number;
+  longitud: number;
+  tienda_id?: string;
+  tienda_nombre?: string;
+  distancia_km?: number;
+  costo_envio: number;
+  fecha_estimada: string;
+  tiempo_estimado: string;
+  instrucciones?: string;
+  direccion_confirmada: boolean;
+  disponibilidad_stock: 'todos_disponibles' | 'parcial' | 'bajo_pedido';
+}
+
+export interface ProjectOrder {
+  id: string;
+  code: string;
+  clientId?: string;
+  cliente_id?: string;
+  projectId?: string;
+  requestId?: string;
+  createdAt: string;
+  clientType: ClientType;
+  client: {
+    name: string;
+    email: string;
+    phone: string;
+    city: string;
+    address?: string;
+    neighborhood?: string;
+    notes?: string;
+    companyName?: string;
+    companyNit?: string;
+  };
+  items: CartItem[];
+  subtotalCOP: number;
+  shippingCOP: number;
+  discountCOP: number;
+  totalCOP: number;
+  deliveryOption: DeliveryOptionType;
+  pickupStore?: string;
+  paymentMethod: PaymentMethodType;
+  paymentBank?: string;
+  status: 'pedido_confirmado' | 'en_preparacion' | 'despachado' | 'entregado' | 'asesoria_pendiente';
+  requiresHumanAdvisory: boolean;
+  assignedStore: string;
+}
+
 export interface ProjectRequest {
   id: string;
   code: string;
+  clientId?: string;
+  cliente_id?: string;
+  projectId?: string;
   createdAt: string;
   clientType: ClientType;
   client: {
@@ -342,5 +475,11 @@ export interface ProjectRequest {
   quotedAmount?: number;
   lastUpdated?: string;
   apiPayload?: ApiProjectSubmissionPayload;
+  cartItems?: CartItem[];
+  orderId?: string;
+  deliveryOption?: DeliveryOptionType;
+  paymentMethod?: PaymentMethodType;
+  requiresHumanAdvisory?: boolean;
 }
+
 

@@ -210,6 +210,44 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
           {/* TAB 2: QUOTE & PRODUCTS */}
           {activeTab === 'quote' && (
             <div className="space-y-4">
+              {/* Order & Cart Items Breakdown if present */}
+              {request.cartItems && request.cartItems.length > 0 && (
+                <div className="p-4 rounded-2xl bg-amber-50/50 border border-amber-300 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900 font-mono flex items-center gap-1.5">
+                      <FileText className="w-3.5 h-3.5 text-amber-700" />
+                      <span>Artículos en Carrito / Pedido ({request.cartItems.length})</span>
+                    </h4>
+                    {request.deliveryOption && (
+                      <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 font-bold capitalize">
+                        Entrega: {request.deliveryOption.replace('_', ' ')}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="divide-y divide-amber-200/60 rounded-xl bg-white border border-amber-200 overflow-hidden text-xs">
+                    {request.cartItems.map((item) => (
+                      <div key={item.id} className="p-3 flex items-center justify-between gap-3">
+                        <div className="flex items-center space-x-2.5 min-w-0">
+                          <img
+                            src={item.imageUrl}
+                            alt={item.name}
+                            className="w-9 h-9 rounded-lg object-cover border border-slate-200 shrink-0"
+                          />
+                          <div className="min-w-0">
+                            <p className="font-bold text-slate-900 truncate">{item.name}</p>
+                            <p className="text-[10px] text-slate-500">{item.presentation} • Cantidad: {item.quantity}</p>
+                          </div>
+                        </div>
+                        <span className="font-mono font-bold text-slate-900 shrink-0">
+                          ${(item.unitPriceCOP * item.quantity).toLocaleString('es-CO')} COP
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-bold text-slate-900 font-display">
